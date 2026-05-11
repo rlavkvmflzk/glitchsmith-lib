@@ -1,0 +1,24 @@
+import { MODULE_ID, HOOKS, SOURCES, CURRENCY_TYPES, SETTING_KEYS } from "../constants.js";
+import { currency } from "./currency.js";
+
+export function exposeApi() {
+  const module = game.modules.get(MODULE_ID);
+  if (!module) {
+    console.warn(`GlitchSmith Library | Module record not found for '${MODULE_ID}'.`);
+    return null;
+  }
+
+  const api = Object.freeze({
+    currency,
+    constants: Object.freeze({
+      HOOKS,
+      SOURCES,
+      CURRENCY_TYPES,
+      SETTING_KEYS,
+      MODULE_ID,
+    }),
+  });
+
+  module.api = api;
+  return api;
+}

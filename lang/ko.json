@@ -1,0 +1,35 @@
+{
+  "GLITCHSMITH-LIB": {
+    "module": {
+      "title": "GlitchSmith 라이브러리",
+      "description": "GlitchSmith 모듈들이 공통으로 쓰는 백엔드 라이브러리입니다. 다른 GlitchSmith 패키지가 의존성으로 자동 설치하며, 단독으로 사용하는 모듈은 아닙니다."
+    },
+    "notifier": {
+      "disableName": "업데이트 알림 끄기",
+      "disableHint": "이 모듈의 업데이트 및 공지 다이얼로그를 표시하지 않습니다.",
+      "updateAvailable": "{title} — 업데이트 알림",
+      "newVersion": "{title} v{version} 사용 가능!",
+      "currentVersion": "(현재: v{current})",
+      "patchHighlights": "패치 노트",
+      "skipVersion": "이 버전 건너뛰기",
+      "criticalWarning": "⚠️ 중요 업데이트 권장",
+      "confirm": "확인",
+      "disableNotification": "알림 끄기",
+      "disableConfirm": "업데이트 알림이 비활성화되었습니다",
+      "settingsReset": "{title}: 업데이트 설정 초기화됨",
+      "announcementTitle": "{title} — 공지",
+      "confirmNotice": "확인",
+      "close": "닫기",
+      "managerName": "업데이트 알림",
+      "managerLabel": "관리",
+      "managerHint": "이전에 끈 GlitchSmith 모듈들의 업데이트 알림을 다시 활성화합니다.",
+      "managerTitle": "GlitchSmith — 업데이트 알림 관리",
+      "managerSummary": "현재 {count}개 모듈의 업데이트 알림이 꺼져 있습니다:",
+      "managerConfirm": "전부 다시 켤까요?",
+      "managerNoneDisabled": "현재 알림이 꺼진 GlitchSmith 모듈이 없습니다.",
+      "managerSuccess": "{count}개 모듈의 업데이트 알림을 다시 활성화했습니다.",
+      "managerYes": "모두 켜기",
+      "managerNo": "취소"
+    }
+  }
+}

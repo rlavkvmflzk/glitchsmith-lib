@@ -1,0 +1,40 @@
+export const MODULE_ID = "glitchsmith-lib";
+
+export const SOCKET_CHANNEL = `module.${MODULE_ID}`;
+
+export const SETTING_KEYS = Object.freeze({
+  CURRENCY_DEFINITIONS: "currency.definitions",
+  CURRENCY_WALLETS: "currency.wallets",
+  CURRENCY_MIGRATION_STATE: "currency.migrationState",
+});
+
+export const HOOKS = Object.freeze({
+  CURRENCY_BALANCE_CHANGED: `${MODULE_ID}.currency.balanceChanged`,
+  CURRENCY_DEFINITIONS_CHANGED: `${MODULE_ID}.currency.definitionsChanged`,
+  READY: `${MODULE_ID}.ready`,
+});
+
+export const SOCKET_HANDLERS = Object.freeze({
+  SET_DEFINITIONS: "currency.setDefinitions",
+  MODIFY_BALANCE: "currency.modifyBalance",
+  SET_BALANCE: "currency.setBalance",
+  TRANSFER_BALANCE: "currency.transferBalance",
+  BULK_IMPORT: "currency.bulkImport",
+});
+
+export const DEFAULT_DEFINITIONS = Object.freeze({
+  base: "",
+  currencies: {},
+});
+
+export const CURRENCY_TYPES = Object.freeze({
+  VIRTUAL: "virtual",
+  SHEET: "sheet",
+});
+
+export const SOURCES = Object.freeze({
+  LIBRARY: MODULE_ID,
+  UNKNOWN: "unknown",
+});
+
+export const SOCKET_TIMEOUT_MS = 10000;

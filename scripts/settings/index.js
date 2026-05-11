@@ -1,0 +1,45 @@
+import { MODULE_ID, SETTING_KEYS, DEFAULT_DEFINITIONS } from "../constants.js";
+import { NotifierManagerLauncher } from "../notifier/manager.js";
+
+export function registerSettings() {
+  game.settings.register(MODULE_ID, SETTING_KEYS.CURRENCY_DEFINITIONS, {
+    name: "Currency Definitions",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: foundry.utils.deepClone(DEFAULT_DEFINITIONS),
+  });
+
+  game.settings.register(MODULE_ID, SETTING_KEYS.CURRENCY_WALLETS, {
+    name: "Virtual Currency Wallets",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {},
+  });
+
+  game.settings.register(MODULE_ID, SETTING_KEYS.CURRENCY_MIGRATION_STATE, {
+    name: "Currency Migration State",
+    scope: "world",
+    config: false,
+    type: Object,
+    default: {},
+  });
+
+  game.settings.registerMenu(MODULE_ID, "notifierManager", {
+    name: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerName"),
+    label: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerLabel"),
+    hint: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerHint"),
+    icon: "fas fa-bell",
+    type: NotifierManagerLauncher,
+    restricted: false,
+  });
+}
+
+export function getSetting(key) {
+  return game.settings.get(MODULE_ID, key);
+}
+
+export async function setSetting(key, value) {
+  return await game.settings.set(MODULE_ID, key, value);
+}

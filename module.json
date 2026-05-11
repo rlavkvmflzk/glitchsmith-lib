@@ -1,0 +1,40 @@
+{
+  "id": "glitchsmith-lib",
+  "title": "GlitchSmith Library",
+  "library": true,
+  "description": "Shared backend services for GlitchSmith modules. Installed automatically as a dependency by other GlitchSmith packages. Not intended for standalone use.",
+  "version": "0.2.2",
+  "authors": [
+    {
+      "name": "rlavkvmflzk",
+      "discord": "sarangi"
+    }
+  ],
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14",
+    "maximum": "14"
+  },
+  "relationships": {
+    "requires": []
+  },
+  "esmodules": [
+    "scripts/glitchsmith-lib.js"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "ko",
+      "name": "Korean",
+      "path": "lang/ko.json"
+    }
+  ],
+  "url": "https://github.com/rlavkvmflzk/glitchsmith-lib",
+  "manifest": "https://raw.githubusercontent.com/rlavkvmflzk/glitchsmith-lib/main/module.json",
+  "download": "https://github.com/rlavkvmflzk/glitchsmith-lib/releases/download/0.2.2/module.zip",  
+  "socket": true
+}

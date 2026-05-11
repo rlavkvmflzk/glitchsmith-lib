@@ -1,0 +1,35 @@
+{
+  "GLITCHSMITH-LIB": {
+    "module": {
+      "title": "GlitchSmith Library",
+      "description": "Shared backend services for GlitchSmith modules. Installed automatically as a dependency by other GlitchSmith packages. Not intended for standalone use."
+    },
+    "notifier": {
+      "disableName": "Disable update notifications",
+      "disableHint": "Suppress this module's update and announcement dialogs.",
+      "updateAvailable": "{title} — Update Available",
+      "newVersion": "{title} v{version} available!",
+      "currentVersion": "(current: v{current})",
+      "patchHighlights": "Patch Highlights",
+      "skipVersion": "Skip this version",
+      "criticalWarning": "⚠️ Critical update recommended",
+      "confirm": "Got it",
+      "disableNotification": "Disable notifications",
+      "disableConfirm": "Update notifications disabled",
+      "settingsReset": "{title}: update settings reset",
+      "announcementTitle": "{title} — Announcement",
+      "confirmNotice": "OK",
+      "close": "Close",
+      "managerName": "Update notifications",
+      "managerLabel": "Manage",
+      "managerHint": "Re-enable update notifications for GlitchSmith modules you previously disabled.",
+      "managerTitle": "GlitchSmith — Update Notifications",
+      "managerSummary": "{count} module(s) currently have update notifications disabled:",
+      "managerConfirm": "Re-enable update notifications for all of them?",
+      "managerNoneDisabled": "No GlitchSmith modules currently have update notifications disabled.",
+      "managerSuccess": "Re-enabled update notifications for {count} module(s).",
+      "managerYes": "Re-enable all",
+      "managerNo": "Cancel"
+    }
+  }
+}
