@@ -1,0 +1,211 @@
+.gs-currency-definitions .window-content {
+  padding: 0.75rem 1rem 1rem;
+}
+
+.gs-currency-definitions .gs-cur-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  font-family: var(--font-primary, sans-serif);
+}
+
+.gs-currency-definitions .gs-cur-header {
+  border-bottom: 1px solid var(--color-border-light-secondary, #aaa);
+  padding-bottom: 0.4rem;
+}
+
+.gs-currency-definitions .gs-cur-system code {
+  font-size: 0.82em;
+  opacity: 0.7;
+  margin-left: 0.25rem;
+}
+
+.gs-currency-definitions .gs-cur-intro {
+  font-size: 0.83em;
+  color: var(--color-text-dark-secondary, #555);
+  margin: 0.35rem 0 0;
+}
+
+.gs-currency-definitions .gs-cur-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border-light-tertiary, #ccc);
+  border-radius: 4px;
+  padding: 0.7rem 0.75rem;
+}
+
+.gs-currency-definitions .gs-cur-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.gs-currency-definitions .gs-cur-section-head h3 {
+  margin: 0;
+  font-size: 1.02em;
+  font-weight: 600;
+  border: none;
+}
+
+.gs-currency-definitions .gs-cur-section-actions {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.gs-currency-definitions .gs-cur-hint {
+  font-size: 0.8em;
+  color: var(--color-text-dark-secondary, #555);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.gs-currency-definitions .gs-cur-table {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.gs-currency-definitions .gs-cur-thead,
+.gs-currency-definitions .gs-cur-row {
+  display: grid;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.25rem;
+}
+
+.gs-currency-definitions .gs-cur-table[data-section="sheet"] .gs-cur-thead,
+.gs-currency-definitions .gs-cur-table[data-section="sheet"] .gs-cur-row {
+  grid-template-columns: 36px 70px minmax(110px, 1fr) 56px 70px minmax(140px, 1.2fr) 50px 30px;
+}
+
+.gs-currency-definitions .gs-cur-table[data-section="virtual"] .gs-cur-thead,
+.gs-currency-definitions .gs-cur-table[data-section="virtual"] .gs-cur-row {
+  grid-template-columns: 36px 80px minmax(120px, 1fr) 70px 80px 50px 30px;
+}
+
+.gs-currency-definitions .gs-cur-thead {
+  font-size: 0.74em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--color-border-light-tertiary, #ccc);
+  padding-bottom: 0.3rem;
+}
+
+.gs-currency-definitions .gs-cur-row input[type="text"],
+.gs-currency-definitions .gs-cur-row input[type="number"] {
+  padding: 0.22rem 0.4rem;
+  font-size: 0.85em;
+  width: 100%;
+  box-sizing: border-box;
+  height: auto;
+}
+
+.gs-currency-definitions .gs-cur-row input[type="radio"] {
+  margin: 0;
+}
+
+.gs-currency-definitions .gs-cur-row .col-primary,
+.gs-currency-definitions .gs-cur-row .col-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gs-currency-definitions .gs-cur-icon-pick {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px dashed var(--color-border-light-tertiary, #bbb);
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.gs-currency-definitions .gs-cur-icon-pick:hover {
+  border-style: solid;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.gs-currency-definitions .gs-cur-icon-pick img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  border: none;
+}
+
+.gs-currency-definitions .gs-cur-icon-pick i {
+  opacity: 0.45;
+  font-size: 0.9em;
+}
+
+.gs-currency-definitions .gs-cur-icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.2rem 0.35rem;
+  color: var(--color-text-dark-secondary, #777);
+  font-size: 0.85em;
+  line-height: 1;
+}
+
+.gs-currency-definitions .gs-cur-icon-btn:hover {
+  color: var(--color-warm-1, #cc4422);
+}
+
+.gs-currency-definitions .gs-cur-empty {
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.84em;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+.gs-currency-definitions .gs-cur-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.32rem 0.7rem;
+  font-size: 0.85em;
+  cursor: pointer;
+  background: var(--color-button-bg, rgba(0, 0, 0, 0.05));
+  border: 1px solid var(--color-border-light-tertiary, #bbb);
+  border-radius: 3px;
+  color: inherit;
+  white-space: nowrap;
+}
+
+.gs-currency-definitions .gs-cur-btn:hover:not(:disabled) {
+  background: var(--color-button-hover, rgba(0, 0, 0, 0.1));
+}
+
+.gs-currency-definitions .gs-cur-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.gs-currency-definitions .gs-cur-btn-primary {
+  background: var(--color-warm-2, #5d8aa8);
+  color: white;
+  border-color: transparent;
+}
+
+.gs-currency-definitions .gs-cur-btn-primary:hover:not(:disabled) {
+  background: var(--color-warm-1, #4a7691);
+}
+
+.gs-currency-definitions .gs-cur-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border-light-secondary, #aaa);
+  margin-top: 0.25rem;
+}

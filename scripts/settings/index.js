@@ -1,5 +1,6 @@
 import { MODULE_ID, SETTING_KEYS, DEFAULT_DEFINITIONS } from "../constants.js";
 import { NotifierManagerLauncher } from "../notifier/manager.js";
+import { CurrencyDefinitionsDialog } from "../apps/CurrencyDefinitionsDialog.js";
 
 export function registerSettings() {
   game.settings.register(MODULE_ID, SETTING_KEYS.CURRENCY_DEFINITIONS, {
@@ -24,6 +25,15 @@ export function registerSettings() {
     config: false,
     type: Object,
     default: {},
+  });
+
+  game.settings.registerMenu(MODULE_ID, "currencyDefinitions", {
+    name: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.name"),
+    label: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.label"),
+    hint: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.hint"),
+    icon: "fas fa-coins",
+    type: CurrencyDefinitionsDialog,
+    restricted: true,
   });
 
   game.settings.registerMenu(MODULE_ID, "notifierManager", {

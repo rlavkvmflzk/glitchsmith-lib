@@ -4,6 +4,59 @@
       "title": "GlitchSmith Library",
       "description": "Shared backend services for GlitchSmith modules. Installed automatically as a dependency by other GlitchSmith packages. Not intended for standalone use."
     },
+    "currency": {
+      "menu": {
+        "name": "Currency Definitions",
+        "label": "Configure Currencies",
+        "hint": "Define sheet and virtual currencies shared across GlitchSmith modules (Stylish Shop, Smartphone Widget, Unboxing Mystery)."
+      },
+      "dialog": {
+        "title": "Currency Definitions",
+        "activeSystem": "Active System",
+        "intro": "Define currencies used by GlitchSmith modules. Sheet currencies map to actor data paths. Virtual currencies are stored in this library and shared across all modules.",
+        "sheetTitle": "Sheet Currencies",
+        "sheetHint": "Currencies stored on the actor sheet (e.g. dnd5e gp/sp/cp). Actor Path is the dot-path to the value on the actor.",
+        "sheetEmpty": "No sheet currencies defined.",
+        "virtualTitle": "Virtual Currencies",
+        "virtualHint": "Virtual currencies tracked by the library and synced across modules. Balances live in the library wallet, not on actor sheets.",
+        "virtualEmpty": "No virtual currencies defined.",
+        "noPreset": "No built-in preset for this game system.",
+        "addRow": "Add Row",
+        "removeRow": "Remove",
+        "pickIcon": "Pick Icon",
+        "resetSheet": "Reset to System Defaults",
+        "resetSheetConfirm": "Replace sheet currencies with the active system's built-in defaults? Current sheet entries will be discarded.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "saved": "Currency definitions saved.",
+        "col": {
+          "icon": "",
+          "id": "ID",
+          "name": "Name",
+          "symbol": "Symbol",
+          "rate": "Rate",
+          "actorPath": "Actor Path",
+          "primary": "Primary"
+        },
+        "errors": {
+          "duplicateId": "Duplicate currency ID: {id}",
+          "saveFailed": "Failed to save currency definitions."
+        }
+      }
+    },
+    "wallet": {
+      "headerButton": "Wallet",
+      "dialog": {
+        "title": "Virtual Currency Wallet",
+        "hint": "Adjust this actor's virtual currency balances. Sheet currencies (system coins) are managed on the actor sheet.",
+        "noCurrencies": "No virtual currencies are defined. Add some via Game Settings → Currency Definitions.",
+        "noActor": "No actor selected.",
+        "save": "Save",
+        "cancel": "Cancel",
+        "saved": "Updated {count} currency balance(s).",
+        "saveErrors": "Some balances failed to save: {errors}"
+      }
+    },
     "notifier": {
       "disableName": "Disable update notifications",
       "disableHint": "Suppress this module's update and announcement dialogs.",

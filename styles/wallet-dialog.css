@@ -1,0 +1,140 @@
+.gs-wallet-root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+}
+
+.gs-wallet-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border-light, rgba(0, 0, 0, 0.15));
+}
+
+.gs-wallet-actor-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.gs-wallet-actor-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-wallet-actor-name {
+  margin: 0;
+  font-size: 1.05em;
+  font-weight: 600;
+}
+
+.gs-wallet-hint {
+  margin: 0;
+  font-size: 0.85em;
+  opacity: 0.7;
+}
+
+.gs-wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.gs-wallet-row {
+  display: grid;
+  grid-template-columns: 32px 1fr 120px;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid var(--color-border-light, rgba(0, 0, 0, 0.1));
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.gs-wallet-icon,
+.gs-wallet-icon-placeholder {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 0.9em;
+  opacity: 0.7;
+}
+
+.gs-wallet-icon {
+  object-fit: cover;
+}
+
+.gs-wallet-row-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.gs-wallet-currency-name {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gs-wallet-currency-symbol {
+  font-size: 0.78em;
+  opacity: 0.6;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.gs-wallet-input {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.gs-wallet-empty {
+  padding: 24px 12px;
+  text-align: center;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.gs-wallet-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-border-light, rgba(0, 0, 0, 0.15));
+}
+
+.gs-btn {
+  padding: 6px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border-dark, rgba(0, 0, 0, 0.3));
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.gs-btn-primary {
+  background: var(--color-bg-btn-active, #4a90e2);
+  color: white;
+}
+
+.gs-btn-secondary {
+  background: var(--color-bg-btn, transparent);
+}
+
+.gs-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -4,6 +4,59 @@
       "title": "GlitchSmith 라이브러리",
       "description": "GlitchSmith 모듈들이 공통으로 쓰는 백엔드 라이브러리입니다. 다른 GlitchSmith 패키지가 의존성으로 자동 설치하며, 단독으로 사용하는 모듈은 아닙니다."
     },
+    "currency": {
+      "menu": {
+        "name": "화폐 정의",
+        "label": "화폐 설정 열기",
+        "hint": "GlitchSmith 모듈들(스타일리시 상점, 스마트폰 위젯, 언박싱 미스터리)이 공통으로 사용하는 시트/가상 화폐를 정의합니다."
+      },
+      "dialog": {
+        "title": "화폐 정의",
+        "activeSystem": "현재 시스템",
+        "intro": "GlitchSmith 모듈에서 사용할 화폐를 정의합니다. 시트 화폐는 액터 데이터 경로와 매핑되고, 가상 화폐는 라이브러리에 저장되어 모든 모듈이 공유합니다.",
+        "sheetTitle": "시트 화폐",
+        "sheetHint": "액터 시트에 저장되는 화폐입니다 (예: dnd5e의 gp/sp/cp). 액터 경로는 액터 데이터의 점(.) 경로입니다.",
+        "sheetEmpty": "정의된 시트 화폐가 없습니다.",
+        "virtualTitle": "가상 화폐",
+        "virtualHint": "라이브러리가 관리하는 가상 화폐입니다. 잔고는 라이브러리에 저장되며 모든 모듈이 공유합니다.",
+        "virtualEmpty": "정의된 가상 화폐가 없습니다.",
+        "noPreset": "현재 게임 시스템에 대한 빌트인 프리셋이 없습니다.",
+        "addRow": "행 추가",
+        "removeRow": "삭제",
+        "pickIcon": "아이콘 선택",
+        "resetSheet": "시스템 기본값 복원",
+        "resetSheetConfirm": "시트 화폐 목록을 현재 시스템의 빌트인 기본값으로 교체할까요? 현재 시트 항목은 사라집니다.",
+        "save": "저장",
+        "cancel": "취소",
+        "saved": "화폐 정의를 저장했습니다.",
+        "col": {
+          "icon": "",
+          "id": "ID",
+          "name": "이름",
+          "symbol": "기호",
+          "rate": "환율",
+          "actorPath": "액터 경로",
+          "primary": "기본"
+        },
+        "errors": {
+          "duplicateId": "중복 화폐 ID: {id}",
+          "saveFailed": "화폐 정의 저장에 실패했습니다."
+        }
+      }
+    },
+    "wallet": {
+      "headerButton": "지갑",
+      "dialog": {
+        "title": "가상 화폐 지갑",
+        "hint": "이 액터의 가상 화폐 잔액을 조정합니다. 시트 화폐(시스템 동전)는 액터 시트에서 관리하세요.",
+        "noCurrencies": "정의된 가상 화폐가 없습니다. Game Settings → 화폐 정의에서 추가하세요.",
+        "noActor": "액터가 선택되지 않았습니다.",
+        "save": "저장",
+        "cancel": "취소",
+        "saved": "{count}개 화폐 잔액을 업데이트했습니다.",
+        "saveErrors": "일부 잔액 저장에 실패했습니다: {errors}"
+      }
+    },
     "notifier": {
       "disableName": "업데이트 알림 끄기",
       "disableHint": "이 모듈의 업데이트 및 공지 다이얼로그를 표시하지 않습니다.",

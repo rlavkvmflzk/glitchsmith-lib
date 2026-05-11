@@ -21,7 +21,6 @@ export const LEGACY_NOTIFIER_MODULES = new Set([
   "stylish-action-hud",
   "unboxing-mystery",
   "visual-novel-maker",
-  "stylish-shop",
 ]);
 
 export const UPDATE_JSON_BASE_URL =

@@ -1,0 +1,116 @@
+<form class="gs-cur-form">
+
+  <header class="gs-cur-header">
+    <span class="gs-cur-system">
+      {{localize "GLITCHSMITH-LIB.currency.dialog.activeSystem"}}:
+      <strong>{{systemName}}</strong>
+      <code>({{systemId}})</code>
+    </span>
+    <p class="gs-cur-intro">{{localize "GLITCHSMITH-LIB.currency.dialog.intro"}}</p>
+  </header>
+
+  <section class="gs-cur-section">
+    <div class="gs-cur-section-head">
+      <h3>{{localize "GLITCHSMITH-LIB.currency.dialog.sheetTitle"}}</h3>
+      <div class="gs-cur-section-actions">
+        {{#if hasPreset}}
+        <button type="button" data-action="resetSheet" class="gs-cur-btn">
+          <i class="fas fa-rotate-left"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.resetSheet"}}
+        </button>
+        {{/if}}
+        <button type="button" data-action="addSheet" class="gs-cur-btn gs-cur-btn-primary">
+          <i class="fas fa-plus"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.addRow"}}
+        </button>
+      </div>
+    </div>
+    <p class="gs-cur-hint">{{localize "GLITCHSMITH-LIB.currency.dialog.sheetHint"}}</p>
+
+    <div class="gs-cur-table" data-section="sheet">
+      <div class="gs-cur-thead">
+        <span class="col-icon">{{localize "GLITCHSMITH-LIB.currency.dialog.col.icon"}}</span>
+        <span class="col-id">{{localize "GLITCHSMITH-LIB.currency.dialog.col.id"}}</span>
+        <span class="col-name">{{localize "GLITCHSMITH-LIB.currency.dialog.col.name"}}</span>
+        <span class="col-symbol">{{localize "GLITCHSMITH-LIB.currency.dialog.col.symbol"}}</span>
+        <span class="col-rate">{{localize "GLITCHSMITH-LIB.currency.dialog.col.rate"}}</span>
+        <span class="col-path">{{localize "GLITCHSMITH-LIB.currency.dialog.col.actorPath"}}</span>
+        <span class="col-primary">{{localize "GLITCHSMITH-LIB.currency.dialog.col.primary"}}</span>
+        <span class="col-actions"></span>
+      </div>
+
+      {{#each sheetRows as |row idx|}}
+      <div class="gs-cur-row" data-section="sheet" data-index="{{idx}}">
+        <button type="button" class="col-icon gs-cur-icon-pick" data-action="pickIcon" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.pickIcon'}}">
+          {{#if row.icon}}<img src="{{row.icon}}" alt="" />{{else}}<i class="fas fa-image"></i>{{/if}}
+        </button>
+        <input class="col-id" type="text" name="id" value="{{row.id}}" placeholder="gp" />
+        <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Gold Pieces" />
+        <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="gp" />
+        <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="0.01" step="any" />
+        <input class="col-path" type="text" name="actorPath" value="{{row.actorPath}}" placeholder="system.currency.gp" />
+        <label class="col-primary">
+          <input type="radio" name="sheet-primary" {{#if row.primary}}checked{{/if}} />
+        </label>
+        <button type="button" class="col-actions gs-cur-icon-btn" data-action="removeSheet" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.removeRow'}}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      {{else}}
+      <div class="gs-cur-empty">{{localize "GLITCHSMITH-LIB.currency.dialog.sheetEmpty"}}</div>
+      {{/each}}
+    </div>
+  </section>
+
+  <section class="gs-cur-section">
+    <div class="gs-cur-section-head">
+      <h3>{{localize "GLITCHSMITH-LIB.currency.dialog.virtualTitle"}}</h3>
+      <div class="gs-cur-section-actions">
+        <button type="button" data-action="addVirtual" class="gs-cur-btn gs-cur-btn-primary">
+          <i class="fas fa-plus"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.addRow"}}
+        </button>
+      </div>
+    </div>
+    <p class="gs-cur-hint">{{localize "GLITCHSMITH-LIB.currency.dialog.virtualHint"}}</p>
+
+    <div class="gs-cur-table" data-section="virtual">
+      <div class="gs-cur-thead">
+        <span class="col-icon">{{localize "GLITCHSMITH-LIB.currency.dialog.col.icon"}}</span>
+        <span class="col-id">{{localize "GLITCHSMITH-LIB.currency.dialog.col.id"}}</span>
+        <span class="col-name">{{localize "GLITCHSMITH-LIB.currency.dialog.col.name"}}</span>
+        <span class="col-symbol">{{localize "GLITCHSMITH-LIB.currency.dialog.col.symbol"}}</span>
+        <span class="col-rate">{{localize "GLITCHSMITH-LIB.currency.dialog.col.rate"}}</span>
+        <span class="col-primary">{{localize "GLITCHSMITH-LIB.currency.dialog.col.primary"}}</span>
+        <span class="col-actions"></span>
+      </div>
+
+      {{#each virtualRows as |row idx|}}
+      <div class="gs-cur-row" data-section="virtual" data-index="{{idx}}">
+        <button type="button" class="col-icon gs-cur-icon-pick" data-action="pickIcon" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.pickIcon'}}">
+          {{#if row.icon}}<img src="{{row.icon}}" alt="" />{{else}}<i class="fas fa-image"></i>{{/if}}
+        </button>
+        <input class="col-id" type="text" name="id" value="{{row.id}}" placeholder="credits" />
+        <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Credits" />
+        <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="Cr" />
+        <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="1" step="1" />
+        <label class="col-primary">
+          <input type="radio" name="virtual-primary" {{#if row.primary}}checked{{/if}} />
+        </label>
+        <button type="button" class="col-actions gs-cur-icon-btn" data-action="removeVirtual" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.removeRow'}}">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      {{else}}
+      <div class="gs-cur-empty">{{localize "GLITCHSMITH-LIB.currency.dialog.virtualEmpty"}}</div>
+      {{/each}}
+    </div>
+  </section>
+
+  <footer class="gs-cur-footer">
+    <button type="button" data-action="cancel" class="gs-cur-btn">
+      {{localize "GLITCHSMITH-LIB.currency.dialog.cancel"}}
+    </button>
+    <button type="button" data-action="save" class="gs-cur-btn gs-cur-btn-primary">
+      <i class="fas fa-save"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.save"}}
+    </button>
+  </footer>
+
+</form>

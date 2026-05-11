@@ -50,7 +50,6 @@ function normalizeDefinitions(input) {
     throw new TypeError("Definitions must be an object.");
   }
   const base = typeof input.base === "string" ? input.base.trim() : "";
-  if (!base) throw new Error("Definitions.base is required.");
 
   const currencies = {};
   const rawCurrencies = input.currencies ?? {};
@@ -78,9 +77,16 @@ function normalizeDefinitions(input) {
       actorPath: type === CURRENCY_TYPES.SHEET && typeof raw?.actorPath === "string"
         ? raw.actorPath
         : "",
+      primary: !!raw?.primary,
+      icon: typeof raw?.icon === "string" ? raw.icon : "",
     };
   }
 
+  if (Object.keys(currencies).length === 0) {
+    return { base: "", currencies: {} };
+  }
+
+  if (!base) throw new Error("Definitions.base is required.");
   if (!currencies[base]) {
     throw new Error(`Base unit '${base}' is not present in currencies.`);
   }

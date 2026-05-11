@@ -1,0 +1,45 @@
+<section class="gs-wallet-root">
+  <header class="gs-wallet-header">
+    <img class="gs-wallet-actor-img" src="{{actorImg}}" alt="" />
+    <div class="gs-wallet-actor-meta">
+      <h3 class="gs-wallet-actor-name">{{actorName}}</h3>
+      <p class="gs-wallet-hint">{{localize "GLITCHSMITH-LIB.wallet.dialog.hint"}}</p>
+    </div>
+  </header>
+
+  {{#if hasCurrencies}}
+  <div class="gs-wallet-list">
+    {{#each currencies}}
+    <div class="gs-wallet-row" data-currency-id="{{id}}">
+      {{#if icon}}
+      <img class="gs-wallet-icon" src="{{icon}}" alt="" />
+      {{else}}
+      <span class="gs-wallet-icon-placeholder"><i class="fas fa-coins"></i></span>
+      {{/if}}
+      <div class="gs-wallet-row-meta">
+        <span class="gs-wallet-currency-name">{{name}}</span>
+        <span class="gs-wallet-currency-symbol">{{symbol}}</span>
+      </div>
+      <input type="number"
+             class="gs-wallet-input"
+             name="balance-{{id}}"
+             value="{{currentBalance}}"
+             min="0"
+             step="1" />
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+  <p class="gs-wallet-empty">{{localize "GLITCHSMITH-LIB.wallet.dialog.noCurrencies"}}</p>
+  {{/if}}
+
+  <footer class="gs-wallet-footer">
+    <button type="button" class="gs-btn gs-btn-secondary" data-action="cancel">
+      {{localize "GLITCHSMITH-LIB.wallet.dialog.cancel"}}
+    </button>
+    <button type="button" class="gs-btn gs-btn-primary" data-action="save" {{#unless hasCurrencies}}disabled{{/unless}}>
+      <i class="fas fa-save"></i>
+      {{localize "GLITCHSMITH-LIB.wallet.dialog.save"}}
+    </button>
+  </footer>
+</section>
