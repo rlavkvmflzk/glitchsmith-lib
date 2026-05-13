@@ -11,6 +11,7 @@ export const SETTING_KEYS = Object.freeze({
 export const HOOKS = Object.freeze({
   CURRENCY_BALANCE_CHANGED: `${MODULE_ID}.currency.balanceChanged`,
   CURRENCY_DEFINITIONS_CHANGED: `${MODULE_ID}.currency.definitionsChanged`,
+  REGISTER_SYSTEM_PRESETS: `${MODULE_ID}.registerSystemPresets`,
   READY: `${MODULE_ID}.ready`,
 });
 

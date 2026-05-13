@@ -2,6 +2,7 @@ import { MODULE_ID, HOOKS } from "./constants.js";
 import { registerSettings } from "./settings/index.js";
 import { registerSocketHandlers } from "./socket/index.js";
 import { exposeApi } from "./api/index.js";
+import { registerSystemPreset } from "./api/presets.js";
 import { registerSheetHeader } from "./ui/sheet-header.js";
 import {
   registerNotifierSettingsForTargets,
@@ -13,6 +14,9 @@ Hooks.once("init", () => {
   registerSettings();
   registerNotifierSettingsForTargets();
   registerSheetHeader();
+  Hooks.callAll(HOOKS.REGISTER_SYSTEM_PRESETS, {
+    register: (systemId, preset) => registerSystemPreset(systemId, preset),
+  });
 });
 
 Hooks.once("ready", async () => {

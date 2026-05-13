@@ -14,7 +14,7 @@ function sheetCurrency(name, symbol, rate, actorPath, primary = false) {
   };
 }
 
-export const SYSTEM_PRESETS = Object.freeze({
+const BUILTIN_PRESETS = Object.freeze({
   dnd5e: Object.freeze({
     base: "cp",
     currencies: Object.freeze({
@@ -59,6 +59,13 @@ export const SYSTEM_PRESETS = Object.freeze({
       upb:     sheetCurrency("UPB",             "upb",     10,   "system.coins.upb.value"),
     }),
   }),
+  sfrpg: Object.freeze({
+    base: "credit",
+    currencies: Object.freeze({
+      credit: sheetCurrency("Credits", "credits", 1, "system.currency.credit", true),
+      upb:    sheetCurrency("UPB",     "upb",     1, "system.currency.upb"),
+    }),
+  }),
   "cyberpunk-red-core": Object.freeze({
     base: "eb",
     currencies: Object.freeze({
@@ -89,6 +96,12 @@ export const SYSTEM_PRESETS = Object.freeze({
       zenit: sheetCurrency("Zenit", "z", 1, "system.resources.zenit.value", true),
     }),
   }),
+  swade: Object.freeze({
+    base: "currency",
+    currencies: Object.freeze({
+      currency: sheetCurrency("Currency", "$", 1, "system.details.currency", true),
+    }),
+  }),
   wfrp4e: Object.freeze({
     base: "bp",
     currencies: Object.freeze({
@@ -99,9 +112,47 @@ export const SYSTEM_PRESETS = Object.freeze({
   }),
 });
 
-export function getSystemPreset(systemId = game?.system?.id) {
-  return SYSTEM_PRESETS[systemId] ?? null;
+const externalPresets = new Map();
+
+function freezePreset(preset) {
+  const currencies = preset?.currencies ?? {};
+  const frozenCurrencies = {};
+  for (const [id, c] of Object.entries(currencies)) {
+    frozenCurrencies[id] = Object.freeze({ ...c });
+  }
+  return Object.freeze({
+    base: preset.base ?? "",
+    currencies: Object.freeze(frozenCurrencies),
+  });
 }
+
+export function registerSystemPreset(systemId, preset) {
+  if (typeof systemId !== "string" || !systemId) {
+    throw new Error("registerSystemPreset: systemId must be a non-empty string");
+  }
+  if (!preset || typeof preset !== "object" || typeof preset.currencies !== "object") {
+    throw new Error("registerSystemPreset: preset must include a 'currencies' object");
+  }
+  if (Object.hasOwn(BUILTIN_PRESETS, systemId)) {
+    console.warn(`glitchsmith-lib | registerSystemPreset: overriding built-in preset for "${systemId}"`);
+  }
+  externalPresets.set(systemId, freezePreset(preset));
+  return true;
+}
+
+export function getSystemPreset(systemId = game?.system?.id) {
+  if (externalPresets.has(systemId)) return externalPresets.get(systemId);
+  return BUILTIN_PRESETS[systemId] ?? null;
+}
+
+export function getRegisteredSystemIds() {
+  return Array.from(new Set([
+    ...Object.keys(BUILTIN_PRESETS),
+    ...externalPresets.keys(),
+  ]));
+}
+
+export const SYSTEM_PRESETS = BUILTIN_PRESETS;
 
 export function buildSheetRowsFromPreset(systemId = game?.system?.id) {
   const preset = getSystemPreset(systemId);

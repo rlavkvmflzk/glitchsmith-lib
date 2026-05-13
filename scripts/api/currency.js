@@ -1,7 +1,7 @@
 import { SOCKET_HANDLERS, SOURCES } from "../constants.js";
 import * as Definitions from "./definitions.js";
 import * as Wallets from "./wallets.js";
-import { getSystemPreset } from "./presets.js";
+import { getRegisteredSystemIds, getSystemPreset, registerSystemPreset } from "./presets.js";
 import { Socket } from "../socket/index.js";
 
 function callerSource(options) {
@@ -35,6 +35,14 @@ export const currency = Object.freeze({
 
   getSystemPreset(systemId) {
     return getSystemPreset(systemId);
+  },
+
+  getRegisteredSystemIds() {
+    return getRegisteredSystemIds();
+  },
+
+  registerSystemPreset(systemId, preset) {
+    return registerSystemPreset(systemId, preset);
   },
 
   async setDefinitions(definitions, options = {}) {

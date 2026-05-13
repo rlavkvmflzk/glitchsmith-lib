@@ -1,6 +1,15 @@
 # Changelog
 
-## [Unreleased]
+## [0.4.0] - 2026-05-13
+
+### ✨ New Features
+- **SFRPG preset**: Built-in currency defaults for Starfinder 1e. Exposes Credits (primary) and UPB at `system.currency.credit` / `system.currency.upb`, matching the active Starfinder 1e actor sheet.
+- **SWADE preset**: Built-in currency defaults for Savage Worlds Adventure Edition. Exposes a single currency at `system.details.currency` (SWADE's configurable currency field) with name "Currency" and symbol "$" — customize per campaign via the Currency Dialog.
+- **External system preset registration**: Other modules can now register currency presets for game systems the library does not ship by default.
+  - Hook: `glitchsmith-lib.registerSystemPresets` fires at `init`. Listener receives `{ register(systemId, preset) }`.
+  - Direct API: `game.modules.get("glitchsmith-lib").api.currency.registerSystemPreset(systemId, preset)`.
+  - Registered presets override built-ins for the same system id, with a console warning.
+- **`lib.currency.getRegisteredSystemIds()`**: Returns all registered system ids (built-in + externally registered).
 
 ## [0.3.0] - 2026-05-11
 
