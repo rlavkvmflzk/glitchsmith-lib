@@ -3,6 +3,7 @@ import { registerSettings } from "./settings/index.js";
 import { registerSocketHandlers } from "./socket/index.js";
 import { exposeApi } from "./api/index.js";
 import { registerSystemPreset } from "./api/presets.js";
+import { registerSheetCurrencyDriver } from "./api/sheet-currency.js";
 import { registerSheetHeader } from "./ui/sheet-header.js";
 import {
   registerNotifierSettingsForTargets,
@@ -16,6 +17,9 @@ Hooks.once("init", () => {
   registerSheetHeader();
   Hooks.callAll(HOOKS.REGISTER_SYSTEM_PRESETS, {
     register: (systemId, preset) => registerSystemPreset(systemId, preset),
+  });
+  Hooks.callAll(HOOKS.REGISTER_SHEET_CURRENCY_DRIVERS, {
+    register: (systemId, driver) => registerSheetCurrencyDriver(systemId, driver),
   });
 });
 

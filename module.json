@@ -3,7 +3,7 @@
   "title": "GlitchSmith Library",
   "library": true,
   "description": "Shared backend services for GlitchSmith modules. Installed automatically as a dependency by other GlitchSmith packages. Not intended for standalone use.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "authors": [
     {
       "name": "rlavkvmflzk",
@@ -39,6 +39,6 @@
   ],
   "url": "https://github.com/rlavkvmflzk/glitchsmith-lib",
   "manifest": "https://github.com/rlavkvmflzk/glitchsmith-lib/releases/latest/download/module.json",
-  "download": "https://github.com/rlavkvmflzk/glitchsmith-lib/releases/download/0.4.0/module.zip",  
+  "download": "https://github.com/rlavkvmflzk/glitchsmith-lib/releases/download/0.5.0/module.zip",  
   "socket": true
 }

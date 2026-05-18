@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.5.0] - 2026-05-16
+
+### ✨ New Features
+- Added shared sheet currency APIs under `glitchsmith-lib.currency`: `getSheetCurrencies`, `getSheetBalance`, `setSheetBalance`, `modifySheetBalance`, `setSheetBalances`, and `registerSheetCurrencyDriver`.
+- Added `modifySheetBalances` for batch sheet currency deltas, so multi-denomination rewards and transactions can validate once and write once.
+- Added built-in sheet currency drivers for actor data paths, PF2e/SF2e coin inventory APIs, and WFRP4e money items.
+- Added the `glitchsmith-lib.registerSheetCurrencyDrivers` hook so external systems can register sheet currency drivers during `init`.
+
+### 🔄 Integrations
+- Unboxing the Mystery, Smartphone Widget, and Stylish Shop can now share the same sheet currency driver layer while keeping their existing virtual wallet integrations.
+- Smartphone Widget and Unboxing the Mystery are now handled by the shared notifier subsystem after their standalone update notifiers were retired.
+
+### 🔧 Compatibility
+- Preserved the existing virtual wallet APIs and currency definition schema so older GlitchSmith modules can continue using the 0.3/0.4 API surface.
+
 ## [0.4.0] - 2026-05-13
 
 ### ✨ New Features

@@ -1,6 +1,7 @@
 import { SOCKET_HANDLERS, SOURCES } from "../constants.js";
 import * as Definitions from "./definitions.js";
 import * as Wallets from "./wallets.js";
+import * as SheetCurrency from "./sheet-currency.js";
 import { getRegisteredSystemIds, getSystemPreset, registerSystemPreset } from "./presets.js";
 import { Socket } from "../socket/index.js";
 
@@ -45,6 +46,10 @@ export const currency = Object.freeze({
     return registerSystemPreset(systemId, preset);
   },
 
+  registerSheetCurrencyDriver(systemId, driver) {
+    return SheetCurrency.registerSheetCurrencyDriver(systemId, driver);
+  },
+
   async setDefinitions(definitions, options = {}) {
     return await Socket.executeAsGM(SOCKET_HANDLERS.SET_DEFINITIONS, {
       definitions,
@@ -68,6 +73,52 @@ export const currency = Object.freeze({
       return null;
     }
     return Wallets.getAllWallets();
+  },
+
+  getSheetCurrencies(systemId = game?.system?.id) {
+    return SheetCurrency.getSheetCurrencies(systemId);
+  },
+
+  getSheetBalance(actor, currencyId) {
+    return SheetCurrency.getSheetBalance(actor, currencyId);
+  },
+
+  async setSheetBalance(actor, currencyId, value, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.SET_SHEET_BALANCE, {
+      ...SheetCurrency.buildActorPayload(actor, options),
+      currencyId,
+      value,
+      source: callerSource(options),
+      reason: callerReason(options),
+    });
+  },
+
+  async modifySheetBalance(actor, currencyId, delta, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.MODIFY_SHEET_BALANCE, {
+      ...SheetCurrency.buildActorPayload(actor, options),
+      currencyId,
+      delta,
+      source: callerSource(options),
+      reason: callerReason(options),
+    });
+  },
+
+  async modifySheetBalances(actor, deltasById, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.MODIFY_SHEET_BALANCES, {
+      ...SheetCurrency.buildActorPayload(actor, options),
+      deltasById,
+      source: callerSource(options),
+      reason: callerReason(options),
+    });
+  },
+
+  async setSheetBalances(actor, balancesById, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.SET_SHEET_BALANCES, {
+      ...SheetCurrency.buildActorPayload(actor, options),
+      balancesById,
+      source: callerSource(options),
+      reason: callerReason(options),
+    });
   },
 
   async modifyBalance(actorId, currencyId, delta, options = {}) {

@@ -7,6 +7,12 @@ import {
   writeTransferBalance,
   writeBulkImport,
 } from "../api/wallets.js";
+import {
+  writeSetSheetBalance,
+  writeModifySheetBalance,
+  writeModifySheetBalances,
+  writeSetSheetBalances,
+} from "../api/sheet-currency.js";
 
 function gmOnly(handler) {
   return async (data, ctx) => {
@@ -43,6 +49,26 @@ export function registerSocketHandlers() {
   Socket.register(
     SOCKET_HANDLERS.BULK_IMPORT,
     gmOnly(async (data) => writeBulkImport(data ?? {}))
+  );
+
+  Socket.register(
+    SOCKET_HANDLERS.SET_SHEET_BALANCE,
+    gmOnly(async (data) => writeSetSheetBalance(data ?? {}))
+  );
+
+  Socket.register(
+    SOCKET_HANDLERS.MODIFY_SHEET_BALANCE,
+    gmOnly(async (data) => writeModifySheetBalance(data ?? {}))
+  );
+
+  Socket.register(
+    SOCKET_HANDLERS.MODIFY_SHEET_BALANCES,
+    gmOnly(async (data) => writeModifySheetBalances(data ?? {}))
+  );
+
+  Socket.register(
+    SOCKET_HANDLERS.SET_SHEET_BALANCES,
+    gmOnly(async (data) => writeSetSheetBalances(data ?? {}))
   );
 }
 

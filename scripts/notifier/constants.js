@@ -16,10 +16,8 @@ export const EXPLICIT_MODULE_IDS = new Set([
 // older version with its own UpdateNotifier produces duplicate dialogs.
 // To migrate, leave the module here and have it call the lib API directly.
 export const LEGACY_NOTIFIER_MODULES = new Set([
-  "smartphone-widget",
   "cinematic-cut-ins",
   "stylish-action-hud",
-  "unboxing-mystery",
   "visual-novel-maker",
 ]);
 
