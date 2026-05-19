@@ -36,6 +36,7 @@
           "symbol": "기호",
           "rate": "환율",
           "actorPath": "액터 경로",
+          "integer": "정수",
           "primary": "기본"
         },
         "errors": {
@@ -82,7 +83,18 @@
       "managerNoneDisabled": "현재 알림이 꺼진 GlitchSmith 모듈이 없습니다.",
       "managerSuccess": "{count}개 모듈의 업데이트 알림을 다시 활성화했습니다.",
       "managerYes": "모두 켜기",
-      "managerNo": "취소"
+      "managerNo": "취소",
+      "board": {
+        "title": "GlitchSmith — 알림 게시판",
+        "menuName": "GlitchSmith 알림 게시판",
+        "menuLabel": "게시판 열기",
+        "menuHint": "GlitchSmith 모듈들의 업데이트와 공지를 한곳에서 확인합니다.",
+        "tabUpdates": "업데이트",
+        "tabAnnouncements": "공지",
+        "manageDisabled": "끈 알림 관리",
+        "manageDisabledHint": "이전에 끈 모듈들의 알림을 다시 켭니다.",
+        "empty": "지금 표시할 GlitchSmith 알림이 없습니다."
+      }
     }
   }
 }

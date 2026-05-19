@@ -27,6 +27,7 @@ function isExplicitlyClaimed(mod) {
 
 export function isGlitchSmithModule(mod) {
   if (!mod) return false;
+  if (mod.id === MODULE_ID) return true;
   return isAuthoredByGlitchSmith(mod) || isExplicitlyClaimed(mod);
 }
 
@@ -38,7 +39,6 @@ export function enumerateNotifierTargets() {
   const targets = [];
   for (const mod of game.modules) {
     if (!mod.active) continue;
-    if (mod.id === MODULE_ID) continue;
     if (!isGlitchSmithModule(mod)) continue;
     if (hasLegacyOwnNotifier(mod)) {
       console.log(`${NOTIFIER_LOG_PREFIX} skipping ${mod.id} (legacy own notifier)`);

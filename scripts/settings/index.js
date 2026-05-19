@@ -1,5 +1,5 @@
 import { MODULE_ID, SETTING_KEYS, DEFAULT_DEFINITIONS } from "../constants.js";
-import { NotifierManagerLauncher } from "../notifier/manager.js";
+import { NotifierBoardLauncher } from "../notifier/manager.js";
 import { CurrencyDefinitionsDialog } from "../apps/CurrencyDefinitionsDialog.js";
 
 export function registerSettings() {
@@ -36,12 +36,12 @@ export function registerSettings() {
     restricted: true,
   });
 
-  game.settings.registerMenu(MODULE_ID, "notifierManager", {
-    name: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerName"),
-    label: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerLabel"),
-    hint: game.i18n.localize("GLITCHSMITH-LIB.notifier.managerHint"),
+  game.settings.registerMenu(MODULE_ID, "notifierBoard", {
+    name: game.i18n.localize("GLITCHSMITH-LIB.notifier.board.menuName"),
+    label: game.i18n.localize("GLITCHSMITH-LIB.notifier.board.menuLabel"),
+    hint: game.i18n.localize("GLITCHSMITH-LIB.notifier.board.menuHint"),
     icon: "fas fa-bell",
-    type: NotifierManagerLauncher,
+    type: NotifierBoardLauncher,
     restricted: false,
   });
 }

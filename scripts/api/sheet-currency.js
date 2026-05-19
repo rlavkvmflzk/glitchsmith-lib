@@ -9,7 +9,15 @@ function getSystemId(systemId = game?.system?.id) {
   return typeof systemId === "string" && systemId ? systemId : game?.system?.id;
 }
 
-function normalizeSheetCurrency(id, raw) {
+function inferIntegerMode(id, raw, systemId) {
+  if (raw?.integer === false) return false;
+  if (raw?.integer === true) return true;
+  return !(systemId === "swade" && id === "currency" && raw?.actorPath === "system.details.currency");
+}
+
+function normalizeSheetCurrency(id, raw, systemId) {
+  const integer = inferIntegerMode(id, raw, systemId);
+  const precision = Number(raw?.precision);
   return {
     id,
     name: raw?.name ?? id,
@@ -19,22 +27,25 @@ function normalizeSheetCurrency(id, raw) {
     actorPath: typeof raw?.actorPath === "string" ? raw.actorPath : "",
     primary: !!raw?.primary,
     icon: typeof raw?.icon === "string" ? raw.icon : "",
+    integer,
+    precision: integer ? 0 : (Number.isInteger(precision) && precision >= 0 && precision <= 6 ? precision : 2),
   };
 }
 
 export function getSheetCurrencies(systemId = game?.system?.id) {
+  const id = getSystemId(systemId);
   const defs = getDefinitions();
   const fromDefinitions = Object.entries(defs.currencies ?? {})
     .filter(([, def]) => def?.type === CURRENCY_TYPES.SHEET)
-    .map(([id, def]) => normalizeSheetCurrency(id, def));
+    .map(([currencyId, def]) => normalizeSheetCurrency(currencyId, def, id));
 
   if (fromDefinitions.length > 0) return fromDefinitions;
 
-  const preset = getSystemPreset(getSystemId(systemId));
+  const preset = getSystemPreset(id);
   if (!preset?.currencies) return [];
   return Object.entries(preset.currencies)
     .filter(([, def]) => def?.type === CURRENCY_TYPES.SHEET)
-    .map(([id, def]) => normalizeSheetCurrency(id, def));
+    .map(([currencyId, def]) => normalizeSheetCurrency(currencyId, def, id));
 }
 
 function getSheetCurrency(currencyId, systemId = game?.system?.id) {
@@ -57,7 +68,12 @@ function readPathValue(source, path) {
   return 0;
 }
 
-function normalizeBalance(value, label = "value") {
+function roundDecimal(value, precision) {
+  const factor = 10 ** precision;
+  return Math.round((value + Number.EPSILON) * factor) / factor;
+}
+
+function normalizeBalance(value, def, label = "value") {
   const numeric = Number(value);
   if (!Number.isFinite(numeric)) {
     throw new Error(`${label} must be a finite number.`);
@@ -65,7 +81,8 @@ function normalizeBalance(value, label = "value") {
   if (numeric < 0) {
     throw new Error(`${label} must not be negative.`);
   }
-  return Math.floor(numeric);
+  if (def?.integer !== false) return Math.floor(numeric);
+  return roundDecimal(numeric, def.precision ?? 2);
 }
 
 function getActorUuid(actor) {
@@ -254,10 +271,11 @@ export async function writeSetSheetBalances({
 
   try {
     for (const [currencyId, raw] of Object.entries(balancesById)) {
-      if (!defs[currencyId]) throw new Error(`Currency '${currencyId}' is not a sheet currency.`);
-      const target = normalizeBalance(raw, currencyId);
+      const def = defs[currencyId];
+      if (!def) throw new Error(`Currency '${currencyId}' is not a sheet currency.`);
+      const target = normalizeBalance(raw, def, currencyId);
       targets[currencyId] = target;
-      before[currencyId] = getDriver(id).readBalance(actor, currencyId, defs[currencyId]);
+      before[currencyId] = getDriver(id).readBalance(actor, currencyId, def);
       after[currencyId] = target;
     }
 
@@ -346,14 +364,16 @@ export async function writeModifySheetBalances({
 
   try {
     for (const [currencyId, rawDelta] of Object.entries(deltasById)) {
-      if (!defs[currencyId]) throw new Error(`Currency '${currencyId}' is not a sheet currency.`);
+      const def = defs[currencyId];
+      if (!def) throw new Error(`Currency '${currencyId}' is not a sheet currency.`);
       const numericDelta = Number(rawDelta);
       if (!Number.isFinite(numericDelta)) throw new Error(`${currencyId} delta must be a finite number.`);
-      const current = getDriver(id).readBalance(actor, currencyId, defs[currencyId]);
-      const next = Math.floor(current + numericDelta);
+      const current = getDriver(id).readBalance(actor, currencyId, def);
+      const rawNext = current + numericDelta;
+      if (rawNext < 0) throw new Error("Insufficient balance.");
+      const next = normalizeBalance(rawNext, def, currencyId);
       before[currencyId] = current;
       after[currencyId] = next;
-      if (next < 0) throw new Error("Insufficient balance.");
     }
   } catch (err) {
     return { success: false, error: err?.message ?? String(err), before, after: before };

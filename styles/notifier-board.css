@@ -1,0 +1,194 @@
+.application.glitchsmith-notifier-board .window-content { padding: 0; }
+
+.gs-nb { display: flex; flex-direction: column; gap: 0; padding: 0 0 12px; }
+
+.gs-nb-tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+  padding: 8px 10px 0;
+  border-bottom: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.08));
+  background: var(--color-bg-option, rgba(255,255,255,0.02));
+}
+.gs-nb-tabs-spacer { flex: 1; }
+
+.gs-nb-tab,
+.gs-nb-subtab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+  color: var(--color-text-secondary, #c8c8c8);
+  font-weight: 500;
+}
+.gs-nb-tab:hover,
+.gs-nb-subtab:hover {
+  background: var(--color-bg-btn-hover, rgba(255,255,255,0.06));
+  color: var(--color-text-primary, #fff);
+}
+.gs-nb-tab.active,
+.gs-nb-subtab.active {
+  background: var(--color-bg-primary, #1f1f1f);
+  color: var(--color-text-primary, #fff);
+  border-color: var(--color-border-light-tertiary, rgba(255,255,255,0.12));
+  border-bottom-color: transparent;
+  margin-bottom: -1px;
+}
+.gs-nb-tab i { font-size: 0.9em; opacity: 0.85; }
+
+.gs-nb-tab-ghost {
+  margin-left: auto;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  color: var(--color-text-secondary, #c8c8c8);
+}
+.gs-nb-tab-ghost:hover {
+  border-color: var(--color-border-light-tertiary, rgba(255,255,255,0.12));
+}
+
+.gs-nb-badge {
+  font-size: 0.75em;
+  background: var(--color-bg-btn, rgba(255,255,255,0.1));
+  color: var(--color-text-primary, #fff);
+  padding: 1px 6px;
+  border-radius: 999px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.gs-nb-secondary-tabs {
+  background: transparent;
+  border-bottom: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.08));
+  padding: 6px 10px 0;
+  flex-wrap: wrap;
+}
+.gs-nb-subtab { font-size: 0.9em; padding: 5px 9px; }
+.gs-nb-subtab-title { font-weight: 600; }
+.gs-nb-subtab-version { font-size: 0.8em; opacity: 0.7; }
+
+.gs-nb-panel { padding: 12px 14px 0; }
+
+.gs-nb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 16px;
+  color: var(--color-text-secondary, #c8c8c8);
+  text-align: center;
+}
+.gs-nb-empty i { font-size: 2.2em; opacity: 0.6; }
+
+.gs-nb-card {
+  margin-top: 12px;
+  padding: 12px 14px;
+  background: var(--color-bg-primary, rgba(0,0,0,0.25));
+  border: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.08));
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gs-nb-card.critical { border-color: rgba(214,48,49,0.6); }
+
+.gs-nb-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.gs-nb-card-header > i { font-size: 1.6em; color: var(--color-text-secondary, #c8c8c8); }
+.gs-nb-card-heading h3 {
+  margin: 0;
+  color: var(--color-text-primary, #fff);
+  font-size: 1.1em;
+  border: none;
+}
+.gs-nb-card-subtitle {
+  margin: 2px 0 0;
+  font-size: 0.85em;
+  color: var(--color-text-secondary, #c8c8c8);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.gs-nb-card-target { color: var(--color-text-primary, #fff); font-weight: 600; }
+
+.gs-nb-card-warning {
+  margin: 0;
+  padding: 6px 10px;
+  background: rgba(214,48,49,0.15);
+  color: var(--color-text-warning, #ff8a80);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9em;
+}
+
+.gs-nb-card-body { color: var(--color-text-primary, #fff); }
+.gs-nb-card-label {
+  margin: 0 0 4px;
+  font-size: 0.8em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary, #c8c8c8);
+}
+.gs-nb-card-notes {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--color-bg-option, rgba(255,255,255,0.03));
+  border: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.06));
+  border-radius: 6px;
+  white-space: pre-wrap;
+  font-family: var(--font-primary, inherit);
+  font-size: 0.95em;
+  max-height: 30vh;
+  overflow: auto;
+  line-height: 1.45;
+}
+.gs-nb-card-body-announcement {
+  background: var(--color-bg-option, rgba(255,255,255,0.03));
+  border: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.06));
+  border-radius: 6px;
+  padding: 12px;
+  line-height: 1.5;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.gs-nb-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.gs-nb-card-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.12));
+  background: var(--color-bg-btn, rgba(255,255,255,0.06));
+  color: var(--color-text-primary, #fff);
+  cursor: pointer;
+}
+.gs-nb-card-actions button:hover {
+  background: var(--color-bg-btn-hover, rgba(255,255,255,0.12));
+}
+.gs-nb-card-action-primary {
+  background: var(--color-button-primary, rgba(230,28,52,0.8)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+.gs-nb-card-action-primary:hover {
+  background: var(--color-button-primary-hover, rgba(230,28,52,1)) !important;
+}
+.gs-nb-card-action-danger:hover {
+  color: var(--color-text-warning, #ff8a80) !important;
+}

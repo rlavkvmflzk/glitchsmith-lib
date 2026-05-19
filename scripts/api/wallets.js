@@ -52,6 +52,20 @@ function writeBalance(wallets, actorId, currencyId, value) {
   wallets[actorId][currencyId] = value;
 }
 
+function roundDecimal(value, precision) {
+  const factor = 10 ** precision;
+  return Math.round((value + Number.EPSILON) * factor) / factor;
+}
+
+function normalizeBalanceValue(value, def) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return 0;
+  const nonNegative = Math.max(0, numeric);
+  if (def?.integer !== false) return Math.floor(nonNegative);
+  const precision = Number.isInteger(Number(def.precision)) ? Number(def.precision) : 2;
+  return roundDecimal(nonNegative, precision);
+}
+
 export async function writeSetBalance({
   actorId,
   currencyId,
@@ -68,7 +82,7 @@ export async function writeSetBalance({
   if (!Number.isFinite(numeric)) {
     return { success: false, error: "value must be a finite number." };
   }
-  const next = Math.max(0, Math.floor(numeric));
+  const next = normalizeBalanceValue(numeric, check.def);
 
   const wallets = readAllWallets();
   const before = readBalance(wallets, actorId, currencyId);
@@ -116,7 +130,7 @@ export async function writeModifyBalance({
     };
   }
 
-  const next = Math.max(0, Math.floor(after));
+  const next = normalizeBalanceValue(after, check.def);
   if (before === next) {
     return { success: true, before, after: next, unchanged: true };
   }
@@ -207,7 +221,9 @@ export async function writeBulkImport({
     for (const [currencyId, value] of Object.entries(wallet)) {
       const numeric = Number(value);
       if (!Number.isFinite(numeric)) continue;
-      next[actorId][currencyId] = Math.max(0, Math.floor(numeric));
+      const def = getCurrency(currencyId);
+      if (!def) continue;
+      next[actorId][currencyId] = normalizeBalanceValue(numeric, def);
     }
   }
 

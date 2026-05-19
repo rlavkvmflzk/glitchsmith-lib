@@ -78,12 +78,12 @@
 
 .gs-currency-definitions .gs-cur-table[data-section="sheet"] .gs-cur-thead,
 .gs-currency-definitions .gs-cur-table[data-section="sheet"] .gs-cur-row {
-  grid-template-columns: 36px 70px minmax(110px, 1fr) 56px 70px minmax(140px, 1.2fr) 50px 30px;
+  grid-template-columns: 36px 64px minmax(96px, 1fr) 54px 64px minmax(120px, 1.2fr) 54px 50px 30px;
 }
 
 .gs-currency-definitions .gs-cur-table[data-section="virtual"] .gs-cur-thead,
 .gs-currency-definitions .gs-cur-table[data-section="virtual"] .gs-cur-row {
-  grid-template-columns: 36px 80px minmax(120px, 1fr) 70px 80px 50px 30px;
+  grid-template-columns: 36px 74px minmax(110px, 1fr) 62px 72px 54px 50px 30px;
 }
 
 .gs-currency-definitions .gs-cur-thead {
@@ -105,11 +105,13 @@
   height: auto;
 }
 
-.gs-currency-definitions .gs-cur-row input[type="radio"] {
+.gs-currency-definitions .gs-cur-row input[type="radio"],
+.gs-currency-definitions .gs-cur-row input[type="checkbox"] {
   margin: 0;
 }
 
 .gs-currency-definitions .gs-cur-row .col-primary,
+.gs-currency-definitions .gs-cur-row .col-integer,
 .gs-currency-definitions .gs-cur-row .col-actions {
   display: flex;
   justify-content: center;

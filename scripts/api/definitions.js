@@ -10,6 +10,18 @@ function clone(value) {
   return foundry.utils.deepClone(value);
 }
 
+function normalizeIntegerMode(raw) {
+  if (raw?.integer === false || raw?.allowDecimals === true || raw?.decimal === true) return false;
+  return true;
+}
+
+function normalizePrecision(raw, integer) {
+  if (integer) return 0;
+  const precision = Number(raw?.precision);
+  if (Number.isInteger(precision) && precision >= 0 && precision <= 6) return precision;
+  return 2;
+}
+
 function emptyDefinitions() {
   return clone(DEFAULT_DEFINITIONS);
 }
@@ -68,6 +80,7 @@ function normalizeDefinitions(input) {
     const type = raw?.type === CURRENCY_TYPES.SHEET
       ? CURRENCY_TYPES.SHEET
       : CURRENCY_TYPES.VIRTUAL;
+    const integer = normalizeIntegerMode(raw);
 
     currencies[id] = {
       name: typeof raw?.name === "string" ? raw.name : id,
@@ -79,6 +92,8 @@ function normalizeDefinitions(input) {
         : "",
       primary: !!raw?.primary,
       icon: typeof raw?.icon === "string" ? raw.icon : "",
+      integer,
+      precision: normalizePrecision(raw, integer),
     };
   }
 

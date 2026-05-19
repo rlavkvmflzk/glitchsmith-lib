@@ -36,6 +36,7 @@
           "symbol": "Symbol",
           "rate": "Rate",
           "actorPath": "Actor Path",
+          "integer": "Whole",
           "primary": "Primary"
         },
         "errors": {
@@ -82,7 +83,18 @@
       "managerNoneDisabled": "No GlitchSmith modules currently have update notifications disabled.",
       "managerSuccess": "Re-enabled update notifications for {count} module(s).",
       "managerYes": "Re-enable all",
-      "managerNo": "Cancel"
+      "managerNo": "Cancel",
+      "board": {
+        "title": "GlitchSmith — Notification Board",
+        "menuName": "GlitchSmith notification board",
+        "menuLabel": "Open board",
+        "menuHint": "Review pending updates and announcements from GlitchSmith modules in one place.",
+        "tabUpdates": "Updates",
+        "tabAnnouncements": "Announcements",
+        "manageDisabled": "Manage disabled",
+        "manageDisabledHint": "Re-enable notifications for modules you previously disabled.",
+        "empty": "Nothing new from GlitchSmith modules right now."
+      }
     }
   }
 }

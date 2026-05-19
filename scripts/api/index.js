@@ -1,4 +1,5 @@
 import { MODULE_ID, HOOKS, SOURCES, CURRENCY_TYPES, SETTING_KEYS } from "../constants.js";
+import { openNotifierBoard } from "../notifier/index.js";
 import { currency } from "./currency.js";
 
 export function exposeApi() {
@@ -10,6 +11,9 @@ export function exposeApi() {
 
   const api = Object.freeze({
     currency,
+    notifier: Object.freeze({
+      openBoard: openNotifierBoard,
+    }),
     constants: Object.freeze({
       HOOKS,
       SOURCES,

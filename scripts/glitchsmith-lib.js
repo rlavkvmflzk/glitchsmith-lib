@@ -2,6 +2,7 @@ import { MODULE_ID, HOOKS } from "./constants.js";
 import { registerSettings } from "./settings/index.js";
 import { registerSocketHandlers } from "./socket/index.js";
 import { exposeApi } from "./api/index.js";
+import { applyDecimalPresetMigration } from "./api/preset-migrations.js";
 import { registerSystemPreset } from "./api/presets.js";
 import { registerSheetCurrencyDriver } from "./api/sheet-currency.js";
 import { registerSheetHeader } from "./ui/sheet-header.js";
@@ -28,5 +29,6 @@ Hooks.once("ready", async () => {
   registerSocketHandlers();
   const api = exposeApi();
   Hooks.callAll(HOOKS.READY, { api });
+  await applyDecimalPresetMigration();
   await runAutoDiscovery();
 });

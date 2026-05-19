@@ -33,6 +33,7 @@
         <span class="col-symbol">{{localize "GLITCHSMITH-LIB.currency.dialog.col.symbol"}}</span>
         <span class="col-rate">{{localize "GLITCHSMITH-LIB.currency.dialog.col.rate"}}</span>
         <span class="col-path">{{localize "GLITCHSMITH-LIB.currency.dialog.col.actorPath"}}</span>
+        <span class="col-integer">{{localize "GLITCHSMITH-LIB.currency.dialog.col.integer"}}</span>
         <span class="col-primary">{{localize "GLITCHSMITH-LIB.currency.dialog.col.primary"}}</span>
         <span class="col-actions"></span>
       </div>
@@ -47,6 +48,9 @@
         <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="gp" />
         <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="0.01" step="any" />
         <input class="col-path" type="text" name="actorPath" value="{{row.actorPath}}" placeholder="system.currency.gp" />
+        <label class="col-integer">
+          <input type="checkbox" name="integer" {{#if row.integer}}checked{{/if}} />
+        </label>
         <label class="col-primary">
           <input type="radio" name="sheet-primary" {{#if row.primary}}checked{{/if}} />
         </label>
@@ -78,6 +82,7 @@
         <span class="col-name">{{localize "GLITCHSMITH-LIB.currency.dialog.col.name"}}</span>
         <span class="col-symbol">{{localize "GLITCHSMITH-LIB.currency.dialog.col.symbol"}}</span>
         <span class="col-rate">{{localize "GLITCHSMITH-LIB.currency.dialog.col.rate"}}</span>
+        <span class="col-integer">{{localize "GLITCHSMITH-LIB.currency.dialog.col.integer"}}</span>
         <span class="col-primary">{{localize "GLITCHSMITH-LIB.currency.dialog.col.primary"}}</span>
         <span class="col-actions"></span>
       </div>
@@ -91,6 +96,9 @@
         <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Credits" />
         <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="Cr" />
         <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="1" step="1" />
+        <label class="col-integer">
+          <input type="checkbox" name="integer" {{#if row.integer}}checked{{/if}} />
+        </label>
         <label class="col-primary">
           <input type="radio" name="virtual-primary" {{#if row.primary}}checked{{/if}} />
         </label>

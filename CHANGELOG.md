@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.6.0] - 2026-05-19
+
+### ✨ New Features
+- **Decimal currencies**: Currency definitions can now mark individual entries as decimal-friendly. Decimal sheet and virtual balances are stored at the configured precision instead of being floored, so single-currency systems like SWADE can use fractional amounts (e.g. `0.5`) without losing data on grant, deduct, or transfer.
+- **SWADE preset decimal default**: The built-in SWADE `Currency` preset now ships with `integer: false`, `precision: 2` so new SWADE worlds pick up decimal support automatically.
+- **Notification Board**: GlitchSmith updates and announcements now surface through a single board instead of one dialog per module. The board uses tabs for Updates and Announcements, with per-module sub-tabs when more than one entry is available. Skip, disable, and acknowledge actions stay per module.
+- **Library self-notifications**: The library now publishes its own update entries through the same board, fetched from `glitchsmith-lib-update.json` on the shared updates feed.
+
+### 🛠 UI
+- **Currency Definitions Dialog**: Added a `Whole` toggle to both sheet and virtual currency rows so GMs can opt individual currencies into decimal precision without touching code. The toggle is enabled by default to preserve existing integer behavior.
+
+### 🔄 Migrations
+- **SWADE decimal backfill**: Existing SWADE worlds whose currency entry predates decimal support automatically gain `integer: false` and `precision: 2` on next load. Runs once per world and skips currencies the GM has already configured.
+
+### 🔄 Integrations
+- **Smartphone Widget and Unboxing the Mystery** are now full notifier targets and appear in the new board alongside other GlitchSmith modules.
+- Added `api.notifier.openBoard()` for modules that want to surface the board manually.
+
 ## [0.5.0] - 2026-05-16
 
 ### ✨ New Features

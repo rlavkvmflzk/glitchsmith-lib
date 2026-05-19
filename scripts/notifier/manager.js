@@ -1,4 +1,3 @@
-import { MODULE_ID } from "../constants.js";
 import { NOTIFIER_SETTING_KEYS, NOTIFIER_LOG_PREFIX } from "./constants.js";
 
 const { DISABLE } = NOTIFIER_SETTING_KEYS;
@@ -7,7 +6,6 @@ function findDisabledModules() {
   const disabled = [];
   for (const mod of game.modules) {
     if (!mod.active) continue;
-    if (mod.id === MODULE_ID) continue;
     const settingPath = `${mod.id}.${DISABLE}`;
     if (!game.settings.settings.has(settingPath)) continue;
     try {
@@ -19,6 +17,10 @@ function findDisabledModules() {
     }
   }
   return disabled;
+}
+
+export async function reopenManagerDialog() {
+  return showManagerDialog();
 }
 
 async function showManagerDialog() {
@@ -69,10 +71,10 @@ async function showManagerDialog() {
   );
 }
 
-export class NotifierManagerLauncher extends FormApplication {
+export class NotifierBoardLauncher extends FormApplication {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      id: "glitchsmith-notifier-manager-launcher",
+      id: "glitchsmith-notifier-board-launcher",
       title: "",
       template: null,
       popOut: false,
@@ -80,7 +82,8 @@ export class NotifierManagerLauncher extends FormApplication {
   }
 
   async render() {
-    await showManagerDialog();
+    const { showBoard } = await import("./board.js");
+    await showBoard({ silentIfEmpty: false });
     return this;
   }
 

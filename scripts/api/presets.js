@@ -2,7 +2,15 @@ import { CURRENCY_TYPES } from "../constants.js";
 
 const SHEET = CURRENCY_TYPES.SHEET;
 
-function sheetCurrency(name, symbol, rate, actorPath, primary = false) {
+function normalizePrecision(options, integer) {
+  if (integer) return 0;
+  const precision = Number(options?.precision);
+  if (Number.isInteger(precision) && precision >= 0 && precision <= 6) return precision;
+  return 2;
+}
+
+function sheetCurrency(name, symbol, rate, actorPath, primary = false, options = {}) {
+  const integer = options.integer !== false;
   return {
     name,
     symbol,
@@ -11,6 +19,8 @@ function sheetCurrency(name, symbol, rate, actorPath, primary = false) {
     actorPath,
     primary,
     icon: "",
+    integer,
+    precision: normalizePrecision(options, integer),
   };
 }
 
@@ -99,7 +109,7 @@ const BUILTIN_PRESETS = Object.freeze({
   swade: Object.freeze({
     base: "currency",
     currencies: Object.freeze({
-      currency: sheetCurrency("Currency", "$", 1, "system.details.currency", true),
+      currency: sheetCurrency("Currency", "$", 1, "system.details.currency", true, { integer: false, precision: 2 }),
     }),
   }),
   wfrp4e: Object.freeze({
@@ -165,5 +175,7 @@ export function buildSheetRowsFromPreset(systemId = game?.system?.id) {
     actorPath: c.actorPath,
     primary: !!c.primary,
     icon: c.icon ?? "",
+    integer: c.integer !== false,
+    precision: Number.isInteger(Number(c.precision)) ? Number(c.precision) : (c.integer === false ? 2 : 0),
   }));
 }

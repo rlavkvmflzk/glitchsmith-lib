@@ -1,0 +1,126 @@
+{{!-- GlitchSmith Notifier Board --}}
+<section class="gs-nb">
+  <nav class="gs-nb-tabs gs-nb-primary-tabs">
+    {{#if hasUpdates}}
+    <button type="button" class="gs-nb-tab{{#if (eq activePrimary 'updates')}} active{{/if}}" data-action="setPrimary" data-tab="updates">
+      <i class="fas fa-gift"></i>
+      <span>{{localize "GLITCHSMITH-LIB.notifier.board.tabUpdates"}}</span>
+      <span class="gs-nb-badge">{{updates.length}}</span>
+    </button>
+    {{/if}}
+    {{#if hasAnnouncements}}
+    <button type="button" class="gs-nb-tab{{#if (eq activePrimary 'announcements')}} active{{/if}}" data-action="setPrimary" data-tab="announcements">
+      <i class="fas fa-bullhorn"></i>
+      <span>{{localize "GLITCHSMITH-LIB.notifier.board.tabAnnouncements"}}</span>
+      <span class="gs-nb-badge">{{announcements.length}}</span>
+    </button>
+    {{/if}}
+    <span class="gs-nb-tabs-spacer"></span>
+    <button type="button" class="gs-nb-tab gs-nb-tab-ghost" data-action="manageDisabled" title="{{localize 'GLITCHSMITH-LIB.notifier.board.manageDisabledHint'}}">
+      <i class="fas fa-bell-slash"></i>
+      <span>{{localize "GLITCHSMITH-LIB.notifier.board.manageDisabled"}}</span>
+    </button>
+  </nav>
+
+  {{#if isEmpty}}
+  <div class="gs-nb-empty">
+    <i class="fas fa-check-circle"></i>
+    <p>{{localize "GLITCHSMITH-LIB.notifier.board.empty"}}</p>
+  </div>
+  {{else}}
+
+  {{#if (eq activePrimary 'updates')}}
+  <div class="gs-nb-panel" data-panel="updates">
+    {{#if (gt updates.length 1)}}
+    <nav class="gs-nb-tabs gs-nb-secondary-tabs">
+      {{#each updates as |item idx|}}
+      <button type="button" class="gs-nb-subtab{{#if (eq ../activeUpdateModuleId item.moduleId)}} active{{/if}}" data-action="setUpdateModule" data-module-id="{{item.moduleId}}">
+        <span class="gs-nb-subtab-title">{{item.title}}</span>
+        <span class="gs-nb-subtab-version">v{{item.latestVersion}}</span>
+      </button>
+      {{/each}}
+    </nav>
+    {{/if}}
+
+    {{#with activeUpdate as |card|}}
+    <article class="gs-nb-card{{#if card.critical}} critical{{/if}}">
+      <header class="gs-nb-card-header">
+        <i class="fas {{#if card.critical}}fa-exclamation-triangle{{else}}fa-gift{{/if}}"></i>
+        <div class="gs-nb-card-heading">
+          <h3>{{card.title}}</h3>
+          <p class="gs-nb-card-subtitle">
+            <span>v{{card.currentVersion}}</span>
+            <i class="fas fa-arrow-right"></i>
+            <span class="gs-nb-card-target">v{{card.latestVersion}}</span>
+          </p>
+        </div>
+      </header>
+      {{#if card.critical}}
+      <p class="gs-nb-card-warning">
+        <i class="fas fa-exclamation-circle"></i>
+        {{localize "GLITCHSMITH-LIB.notifier.criticalWarning"}}
+      </p>
+      {{/if}}
+      <div class="gs-nb-card-body">
+        <p class="gs-nb-card-label">{{localize "GLITCHSMITH-LIB.notifier.patchHighlights"}}</p>
+        <pre class="gs-nb-card-notes">{{card.notes}}</pre>
+      </div>
+      <footer class="gs-nb-card-actions">
+        <button type="button" data-action="skipUpdate" data-module-id="{{card.moduleId}}" data-version="{{card.latestVersion}}">
+          <i class="fas fa-forward"></i>
+          {{localize "GLITCHSMITH-LIB.notifier.skipVersion"}}
+        </button>
+        <button type="button" class="gs-nb-card-action-danger" data-action="disableModule" data-module-id="{{card.moduleId}}">
+          <i class="fas fa-bell-slash"></i>
+          {{localize "GLITCHSMITH-LIB.notifier.disableNotification"}}
+        </button>
+        <button type="button" class="gs-nb-card-action-primary" data-action="acknowledgeUpdate" data-module-id="{{card.moduleId}}">
+          <i class="fas fa-check"></i>
+          {{localize "GLITCHSMITH-LIB.notifier.confirm"}}
+        </button>
+      </footer>
+    </article>
+    {{/with}}
+  </div>
+  {{/if}}
+
+  {{#if (eq activePrimary 'announcements')}}
+  <div class="gs-nb-panel" data-panel="announcements">
+    {{#if (gt announcements.length 1)}}
+    <nav class="gs-nb-tabs gs-nb-secondary-tabs">
+      {{#each announcements as |item idx|}}
+      <button type="button" class="gs-nb-subtab{{#if (eq ../activeAnnouncementModuleId item.moduleId)}} active{{/if}}" data-action="setAnnouncementModule" data-module-id="{{item.moduleId}}">
+        <span class="gs-nb-subtab-title">{{item.title}}</span>
+        {{#if item.noticeTitle}}<span class="gs-nb-subtab-version">{{item.noticeTitle}}</span>{{/if}}
+      </button>
+      {{/each}}
+    </nav>
+    {{/if}}
+
+    {{#with activeAnnouncement as |card|}}
+    <article class="gs-nb-card">
+      <header class="gs-nb-card-header">
+        <i class="fas fa-bullhorn"></i>
+        <div class="gs-nb-card-heading">
+          <h3>{{card.title}}</h3>
+          {{#if card.noticeTitle}}<p class="gs-nb-card-subtitle">{{card.noticeTitle}}</p>{{/if}}
+        </div>
+      </header>
+      <div class="gs-nb-card-body gs-nb-card-body-announcement">{{{card.content}}}</div>
+      <footer class="gs-nb-card-actions">
+        <button type="button" class="gs-nb-card-action-danger" data-action="disableModule" data-module-id="{{card.moduleId}}">
+          <i class="fas fa-bell-slash"></i>
+          {{localize "GLITCHSMITH-LIB.notifier.disableNotification"}}
+        </button>
+        <button type="button" class="gs-nb-card-action-primary" data-action="acknowledgeAnnouncement" data-module-id="{{card.moduleId}}" data-notice-id="{{card.noticeId}}">
+          <i class="fas fa-check"></i>
+          {{localize "GLITCHSMITH-LIB.notifier.confirmNotice"}}
+        </button>
+      </footer>
+    </article>
+    {{/with}}
+  </div>
+  {{/if}}
+
+  {{/if}}
+</section>

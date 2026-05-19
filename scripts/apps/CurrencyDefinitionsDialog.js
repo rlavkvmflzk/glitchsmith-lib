@@ -18,6 +18,8 @@ function readDefinitionRows() {
       actorPath: c.actorPath ?? "",
       primary: !!c.primary,
       icon: c.icon ?? "",
+      integer: c.integer !== false,
+      precision: Number.isInteger(Number(c.precision)) ? Number(c.precision) : (c.integer === false ? 2 : 0),
     };
     if (c.type === CURRENCY_TYPES.SHEET) sheetRows.push(row);
     else virtualRows.push(row);
@@ -40,6 +42,8 @@ function rowsToCurrencies(sheetRows, virtualRows) {
       actorPath: String(r.actorPath ?? "").trim(),
       primary: !!r.primary,
       icon: String(r.icon ?? "").trim(),
+      integer: r.integer !== false,
+      precision: Number.isInteger(Number(r.precision)) ? Number(r.precision) : (r.integer === false ? 2 : 0),
     };
   }
   for (const r of virtualRows) {
@@ -53,6 +57,8 @@ function rowsToCurrencies(sheetRows, virtualRows) {
       actorPath: "",
       primary: !!r.primary,
       icon: String(r.icon ?? "").trim(),
+      integer: r.integer !== false,
+      precision: Number.isInteger(Number(r.precision)) ? Number(r.precision) : (r.integer === false ? 2 : 0),
     };
   }
   return out;
@@ -141,6 +147,7 @@ export class CurrencyDefinitionsDialog extends HandlebarsApplicationMixin(Applic
       this.#bindInput(row, "symbol",    v => { this.#sheetRows[idx].symbol = v; });
       this.#bindInput(row, "actorPath", v => { this.#sheetRows[idx].actorPath = v; });
       this.#bindNumberInput(row, "rate", v => { this.#sheetRows[idx].rate = v; });
+      this.#bindCheckboxInput(row, "integer", v => { this.#sheetRows[idx].integer = v; });
       this.#bindCheckboxInput(row, "sheet-primary", v => {
         if (v) this.#sheetRows.forEach((r, i) => { r.primary = (i === idx); });
         else this.#sheetRows[idx].primary = false;
@@ -155,6 +162,7 @@ export class CurrencyDefinitionsDialog extends HandlebarsApplicationMixin(Applic
       this.#bindInput(row, "name",   v => { this.#virtualRows[idx].name = v; });
       this.#bindInput(row, "symbol", v => { this.#virtualRows[idx].symbol = v; });
       this.#bindNumberInput(row, "rate", v => { this.#virtualRows[idx].rate = v; });
+      this.#bindCheckboxInput(row, "integer", v => { this.#virtualRows[idx].integer = v; });
       this.#bindCheckboxInput(row, "virtual-primary", v => {
         if (v) this.#virtualRows.forEach((r, i) => { r.primary = (i === idx); });
         else this.#virtualRows[idx].primary = false;
@@ -189,7 +197,7 @@ export class CurrencyDefinitionsDialog extends HandlebarsApplicationMixin(Applic
   static #onAddSheet(event, target) {
     this.#sheetRows.push({
       id: "", name: "", symbol: "", rate: 1, actorPath: "",
-      primary: this.#sheetRows.length === 0, icon: "",
+      primary: this.#sheetRows.length === 0, icon: "", integer: true, precision: 0,
     });
     this.render({ force: false });
   }
@@ -208,7 +216,7 @@ export class CurrencyDefinitionsDialog extends HandlebarsApplicationMixin(Applic
   static #onAddVirtual(event, target) {
     this.#virtualRows.push({
       id: "", name: "", symbol: "", rate: 1,
-      primary: this.#virtualRows.length === 0, icon: "",
+      primary: this.#virtualRows.length === 0, icon: "", integer: true, precision: 0,
     });
     this.render({ force: false });
   }
