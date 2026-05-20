@@ -63,7 +63,7 @@
       {{/if}}
       <div class="gs-nb-card-body">
         <p class="gs-nb-card-label">{{localize "GLITCHSMITH-LIB.notifier.patchHighlights"}}</p>
-        <pre class="gs-nb-card-notes">{{card.notes}}</pre>
+        <div class="gs-nb-card-notes">{{{card.notes}}}</div>
       </div>
       <footer class="gs-nb-card-actions">
         <button type="button" data-action="skipUpdate" data-module-id="{{card.moduleId}}" data-version="{{card.latestVersion}}">

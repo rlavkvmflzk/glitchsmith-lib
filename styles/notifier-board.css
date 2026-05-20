@@ -144,12 +144,20 @@
   background: var(--color-bg-option, rgba(255,255,255,0.03));
   border: 1px solid var(--color-border-light-tertiary, rgba(255,255,255,0.06));
   border-radius: 6px;
-  white-space: pre-wrap;
   font-family: var(--font-primary, inherit);
   font-size: 0.95em;
   max-height: 30vh;
   overflow: auto;
   line-height: 1.45;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.gs-nb-card-notes code {
+  padding: 1px 5px;
+  background: var(--color-bg-btn, rgba(255,255,255,0.08));
+  border-radius: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9em;
 }
 .gs-nb-card-body-announcement {
   background: var(--color-bg-option, rgba(255,255,255,0.03));

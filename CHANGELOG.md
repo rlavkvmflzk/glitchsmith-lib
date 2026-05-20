@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.6.1] - 2026-05-20
+
+### 🐛 Fixes
+- **Notification Board**: Update notes now render inline HTML formatting instead of displaying tags such as `<b>`, `<br>`, and `<code>` as text.
+
 ## [0.6.0] - 2026-05-19
 
 ### ✨ New Features
