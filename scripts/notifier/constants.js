@@ -18,7 +18,6 @@ export const EXPLICIT_MODULE_IDS = new Set([
 export const LEGACY_NOTIFIER_MODULES = new Set([
   "cinematic-cut-ins",
   "stylish-action-hud",
-  "visual-novel-maker",
 ]);
 
 export const UPDATE_JSON_BASE_URL =

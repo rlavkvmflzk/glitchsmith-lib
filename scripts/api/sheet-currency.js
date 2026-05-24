@@ -22,7 +22,7 @@ function normalizeSheetCurrency(id, raw, systemId) {
     id,
     name: raw?.name ?? id,
     symbol: raw?.symbol ?? "",
-    rate: Number.isFinite(Number(raw?.rate)) && Number(raw.rate) >= 1 ? Number(raw.rate) : 1,
+    rate: Number.isFinite(Number(raw?.rate)) && Number(raw.rate) > 0 ? Number(raw.rate) : 1,
     type: CURRENCY_TYPES.SHEET,
     actorPath: typeof raw?.actorPath === "string" ? raw.actorPath : "",
     primary: !!raw?.primary,

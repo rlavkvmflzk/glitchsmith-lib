@@ -95,7 +95,7 @@
         <input class="col-id" type="text" name="id" value="{{row.id}}" placeholder="credits" />
         <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Credits" />
         <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="Cr" />
-        <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="1" step="1" />
+        <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="0.01" step="any" />
         <label class="col-integer">
           <input type="checkbox" name="integer" {{#if row.integer}}checked{{/if}} />
         </label>

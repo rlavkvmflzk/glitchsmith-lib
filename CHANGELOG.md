@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.2] - 2026-05-25
+
+### 🐛 Fixes
+- **Currency exchange rates**: Currency definitions now accept positive fractional rates below 1, such as `0.625`, for sheet and virtual currencies. The rate field no longer treats decimal conversion values as whole-number-only input.
+
+### 🔄 Integrations
+- Visual Novel Maker is now auto-discovered by the notifier subsystem after its standalone UpdateNotifier was retired.
+
 ## [0.6.1] - 2026-05-20
 
 ### 🐛 Fixes

@@ -74,7 +74,7 @@ function normalizeDefinitions(input) {
       throw new Error(`Invalid currency id: ${id}`);
     }
     const rate = Number(raw?.rate);
-    if (!Number.isFinite(rate) || rate < 1) {
+    if (!Number.isFinite(rate) || rate <= 0) {
       throw new Error(`Currency '${id}' rate must be a positive number.`);
     }
     const type = raw?.type === CURRENCY_TYPES.SHEET
