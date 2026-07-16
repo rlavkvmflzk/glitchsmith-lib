@@ -29,6 +29,17 @@
   </div>
   {{else}}
 
+  <div class="gs-nb-bulk-actions">
+    <button type="button" data-action="acknowledgeAll">
+      <i class="fas fa-check-double"></i>
+      {{localize "GLITCHSMITH-LIB.notifier.allConfirmButton"}}
+    </button>
+    <button type="button" class="gs-nb-card-action-danger" data-action="disableAll">
+      <i class="fas fa-bell-slash"></i>
+      {{localize "GLITCHSMITH-LIB.notifier.allDisableButton"}}
+    </button>
+  </div>
+
   {{#if (eq activePrimary 'updates')}}
   <div class="gs-nb-panel" data-panel="updates">
     {{#if (gt updates.length 1)}}

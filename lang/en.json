@@ -13,9 +13,9 @@
       "dialog": {
         "title": "Currency Definitions",
         "activeSystem": "Active System",
-        "intro": "Define currencies used by GlitchSmith modules. Sheet currencies map to actor data paths. Virtual currencies are stored in this library and shared across all modules.",
+        "intro": "Define currencies used by GlitchSmith modules. Sheet currencies can map to actor data paths or embedded item quantities. Virtual currencies are stored in this library and shared across all modules.",
         "sheetTitle": "Sheet Currencies",
-        "sheetHint": "Currencies stored on the actor sheet (e.g. dnd5e gp/sp/cp). Actor Path is the dot-path to the value on the actor.",
+        "sheetHint": "Currencies stored on the actor sheet (e.g. dnd5e gp/sp/cp) or as actor-owned items. Actor Path is used for direct actor values; Embedded Item uses the fields below the row.",
         "sheetEmpty": "No sheet currencies defined.",
         "virtualTitle": "Virtual Currencies",
         "virtualHint": "Virtual currencies tracked by the library and synced across modules. Balances live in the library wallet, not on actor sheets.",
@@ -35,9 +35,37 @@
           "name": "Name",
           "symbol": "Symbol",
           "rate": "Rate",
+          "storage": "Storage",
           "actorPath": "Actor Path",
           "integer": "Whole",
           "primary": "Primary"
+        },
+        "storage": {
+          "actorPath": "Actor Path",
+          "embeddedItem": "Embedded Item",
+          "itemType": "Item Type",
+          "quantityPath": "Quantity Path",
+          "filters": "Filters",
+          "createFromUuid": "Create From UUID"
+        },
+        "scan": {
+          "button": "Scan Actor",
+          "test": "Test",
+          "hint": "Select a token or assign a character to your user, then scan to list its item-based currencies.",
+          "results": "Candidates",
+          "searchPlaceholder": "Search candidates by name, type, or filter...",
+          "count": "{shown} of {total} shown",
+          "noMatch": "No candidates match your search.",
+          "apply": "Apply",
+          "clear": "Clear results",
+          "summaryQty": "qty",
+          "noActor": "No actor found. Select a token or assign a character to your user.",
+          "empty": "No item-based currency candidates found on {actor}.",
+          "testInvalid": "Set a quantity path and an item type or filter before testing.",
+          "testSuccess": "{actor}: matched \"{item}\" — quantity {quantity}.",
+          "testFail": "{actor}: no item matched the current fields.",
+          "dropHint": "Or drag a currency item from the sidebar or a compendium here to auto-fill.",
+          "dropInvalid": "Drop a valid Item to auto-fill the currency fields."
         },
         "errors": {
           "duplicateId": "Duplicate currency ID: {id}",
@@ -47,6 +75,10 @@
     },
     "wallet": {
       "headerButton": "Wallet",
+      "hideHeaderButton": {
+        "name": "Hide Wallet sheet header button",
+        "hint": "Hide the GlitchSmith Library virtual wallet button from Actor sheet headers on this client. Wallet balances and APIs remain available."
+      },
       "dialog": {
         "title": "Virtual Currency Wallet",
         "hint": "Adjust this actor's virtual currency balances. Sheet currencies (system coins) are managed on the actor sheet.",
@@ -68,8 +100,12 @@
       "skipVersion": "Skip this version",
       "criticalWarning": "⚠️ Critical update recommended",
       "confirm": "Got it",
+      "allConfirmButton": "OK all",
+      "allConfirm": "Marked all notifications as read",
       "disableNotification": "Disable notifications",
+      "allDisableButton": "Disable all notifications",
       "disableConfirm": "Update notifications disabled",
+      "allDisableConfirm": "Disabled update notifications for every listed module",
       "settingsReset": "{title}: update settings reset",
       "announcementTitle": "{title} — Announcement",
       "confirmNotice": "OK",

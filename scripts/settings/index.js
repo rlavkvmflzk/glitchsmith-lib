@@ -27,6 +27,15 @@ export function registerSettings() {
     default: {},
   });
 
+  game.settings.register(MODULE_ID, SETTING_KEYS.WALLET_HIDE_HEADER_BUTTON, {
+    name: "GLITCHSMITH-LIB.wallet.hideHeaderButton.name",
+    hint: "GLITCHSMITH-LIB.wallet.hideHeaderButton.hint",
+    scope: "client",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
   game.settings.registerMenu(MODULE_ID, "currencyDefinitions", {
     name: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.name"),
     label: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.label"),

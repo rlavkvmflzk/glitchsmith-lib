@@ -1,3 +1,5 @@
+import { MODULE_ID, SETTING_KEYS } from "../constants.js";
+
 const ACTION_NAME = "gsOpenWallet";
 const BUTTON_CLASS = "gs-wallet-header-btn";
 const ICON = "fas fa-wallet";
@@ -11,6 +13,7 @@ function _shouldShow(app) {
   const actor = _getActor(app);
   if (!actor || actor.documentName !== "Actor") return false;
   if (!game.user?.isGM) return false;
+  if (game.settings.get(MODULE_ID, SETTING_KEYS.WALLET_HIDE_HEADER_BUTTON)) return false;
   return true;
 }
 

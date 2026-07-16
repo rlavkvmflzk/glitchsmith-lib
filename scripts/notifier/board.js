@@ -61,7 +61,9 @@ function defineBoardClass() {
         skipUpdate: NotifierBoard.#onSkipUpdate,
         acknowledgeUpdate: NotifierBoard.#onAcknowledgeUpdate,
         acknowledgeAnnouncement: NotifierBoard.#onAcknowledgeAnnouncement,
+        acknowledgeAll: NotifierBoard.#onAcknowledgeAll,
         disableModule: NotifierBoard.#onDisableModule,
+        disableAll: NotifierBoard.#onDisableAll,
         manageDisabled: NotifierBoard.#onManageDisabled,
       },
     };
@@ -171,6 +173,20 @@ function defineBoardClass() {
       this.render();
     }
 
+    static async #onAcknowledgeAll() {
+      const announcements = this.#announcements.filter(
+        (announcement) => announcement.moduleId && announcement.noticeId
+      );
+      await Promise.all(
+        announcements.map((announcement) =>
+          setSetting(announcement.moduleId, LAST_SEEN_NOTICE_ID, announcement.noticeId)
+        )
+      );
+      this.#clearCards();
+      ui.notifications?.info(localize("GLITCHSMITH-LIB.notifier.allConfirm"));
+      this.render();
+    }
+
     static async #onDisableModule(event, target) {
       const moduleId = target?.dataset?.moduleId;
       if (!moduleId) return;
@@ -181,10 +197,32 @@ function defineBoardClass() {
       this.render();
     }
 
+    static async #onDisableAll() {
+      const moduleIds = new Set(
+        [...this.#updates, ...this.#announcements]
+          .map((card) => card.moduleId)
+          .filter(Boolean)
+      );
+      if (moduleIds.size === 0) return;
+      await Promise.all(
+        Array.from(moduleIds, (moduleId) => setSetting(moduleId, DISABLE, true))
+      );
+      this.#clearCards();
+      ui.notifications?.info(localize("GLITCHSMITH-LIB.notifier.allDisableConfirm"));
+      this.render();
+    }
+
     static async #onManageDisabled() {
       const { reopenManagerDialog } = await import("./manager.js");
       await reopenManagerDialog();
       this.render();
+    }
+
+    #clearCards() {
+      this.#updates = [];
+      this.#announcements = [];
+      this.#activeUpdateModuleId = null;
+      this.#activeAnnouncementModuleId = null;
     }
 
     #removeUpdateCard(moduleId) {

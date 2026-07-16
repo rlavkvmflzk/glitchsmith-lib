@@ -22,6 +22,37 @@ function normalizePrecision(raw, integer) {
   return 2;
 }
 
+function normalizeEmbeddedItemStorage(raw, currencyId) {
+  if (!raw || raw.type !== "embeddedItem") return null;
+
+  const itemType = typeof raw.itemType === "string" ? raw.itemType.trim() : "";
+  const quantityPath = typeof raw.quantityPath === "string" ? raw.quantityPath.trim() : "";
+  const createFromUuid = typeof raw.createFromUuid === "string" ? raw.createFromUuid.trim() : "";
+  const filters = Array.isArray(raw.filters)
+    ? raw.filters
+      .map(filter => ({
+        path: typeof filter?.path === "string" ? filter.path.trim() : "",
+        equals: typeof filter?.equals === "string" ? filter.equals.trim() : filter?.equals,
+      }))
+      .filter(filter => filter.path)
+    : [];
+
+  if (!quantityPath) {
+    throw new Error(`Currency '${currencyId}' embedded item storage requires quantityPath.`);
+  }
+  if (!itemType && filters.length === 0) {
+    throw new Error(`Currency '${currencyId}' embedded item storage requires itemType or filters.`);
+  }
+
+  return {
+    type: "embeddedItem",
+    ...(itemType ? { itemType } : {}),
+    filters,
+    quantityPath,
+    ...(createFromUuid ? { createFromUuid } : {}),
+  };
+}
+
 function emptyDefinitions() {
   return clone(DEFAULT_DEFINITIONS);
 }
@@ -81,6 +112,10 @@ function normalizeDefinitions(input) {
       ? CURRENCY_TYPES.SHEET
       : CURRENCY_TYPES.VIRTUAL;
     const integer = normalizeIntegerMode(raw);
+    const increment = Number(raw?.increment);
+    const storage = type === CURRENCY_TYPES.SHEET
+      ? normalizeEmbeddedItemStorage(raw?.storage, id)
+      : null;
 
     currencies[id] = {
       name: typeof raw?.name === "string" ? raw.name : id,
@@ -94,6 +129,8 @@ function normalizeDefinitions(input) {
       icon: typeof raw?.icon === "string" ? raw.icon : "",
       integer,
       precision: normalizePrecision(raw, integer),
+      ...(Number.isFinite(increment) && increment > 0 ? { increment } : {}),
+      ...(storage ? { storage } : {}),
     };
   }
 

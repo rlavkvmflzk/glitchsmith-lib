@@ -32,6 +32,7 @@
         <span class="col-name">{{localize "GLITCHSMITH-LIB.currency.dialog.col.name"}}</span>
         <span class="col-symbol">{{localize "GLITCHSMITH-LIB.currency.dialog.col.symbol"}}</span>
         <span class="col-rate">{{localize "GLITCHSMITH-LIB.currency.dialog.col.rate"}}</span>
+        <span class="col-storage">{{localize "GLITCHSMITH-LIB.currency.dialog.col.storage"}}</span>
         <span class="col-path">{{localize "GLITCHSMITH-LIB.currency.dialog.col.actorPath"}}</span>
         <span class="col-integer">{{localize "GLITCHSMITH-LIB.currency.dialog.col.integer"}}</span>
         <span class="col-primary">{{localize "GLITCHSMITH-LIB.currency.dialog.col.primary"}}</span>
@@ -39,24 +40,95 @@
       </div>
 
       {{#each sheetRows as |row idx|}}
-      <div class="gs-cur-row" data-section="sheet" data-index="{{idx}}">
-        <button type="button" class="col-icon gs-cur-icon-pick" data-action="pickIcon" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.pickIcon'}}">
-          {{#if row.icon}}<img src="{{row.icon}}" alt="" />{{else}}<i class="fas fa-image"></i>{{/if}}
-        </button>
-        <input class="col-id" type="text" name="id" value="{{row.id}}" placeholder="gp" />
-        <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Gold Pieces" />
-        <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="gp" />
-        <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="0.01" step="any" />
-        <input class="col-path" type="text" name="actorPath" value="{{row.actorPath}}" placeholder="system.currency.gp" />
-        <label class="col-integer">
-          <input type="checkbox" name="integer" {{#if row.integer}}checked{{/if}} />
-        </label>
-        <label class="col-primary">
-          <input type="radio" name="sheet-primary" {{#if row.primary}}checked{{/if}} />
-        </label>
-        <button type="button" class="col-actions gs-cur-icon-btn" data-action="removeSheet" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.removeRow'}}">
-          <i class="fas fa-trash"></i>
-        </button>
+      <div class="gs-cur-entry" data-section="sheet" data-index="{{idx}}">
+        <div class="gs-cur-row" data-section="sheet" data-index="{{idx}}">
+          <button type="button" class="col-icon gs-cur-icon-pick" data-action="pickIcon" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.pickIcon'}}">
+            {{#if row.icon}}<img src="{{row.icon}}" alt="" />{{else}}<i class="fas fa-image"></i>{{/if}}
+          </button>
+          <input class="col-id" type="text" name="id" value="{{row.id}}" placeholder="gp" />
+          <input class="col-name" type="text" name="name" value="{{row.name}}" placeholder="Gold Pieces" />
+          <input class="col-symbol" type="text" name="symbol" value="{{row.symbol}}" placeholder="gp" />
+          <input class="col-rate" type="number" name="rate" value="{{row.rate}}" min="0.01" step="any" />
+          <select class="col-storage" name="storageType">
+            <option value="actorPath" {{#unless row.isEmbeddedItem}}selected{{/unless}}>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.actorPath"}}</option>
+            <option value="embeddedItem" {{#if row.isEmbeddedItem}}selected{{/if}}>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.embeddedItem"}}</option>
+          </select>
+          <input class="col-path" type="text" name="actorPath" value="{{row.actorPath}}" placeholder="system.currency.gp" {{#if row.isEmbeddedItem}}disabled{{/if}} />
+          <label class="col-integer">
+            <input type="checkbox" name="integer" {{#if row.integer}}checked{{/if}} />
+          </label>
+          <label class="col-primary">
+            <input type="radio" name="sheet-primary" {{#if row.primary}}checked{{/if}} />
+          </label>
+          <button type="button" class="col-actions gs-cur-icon-btn" data-action="removeSheet" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.removeRow'}}">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+        {{#if row.isEmbeddedItem}}
+        <div class="gs-cur-storage-panel">
+          <label>
+            <span>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.itemType"}}</span>
+            <input type="text" name="storageItemType" value="{{row.storageItemType}}" placeholder="gear" />
+          </label>
+          <label>
+            <span>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.quantityPath"}}</span>
+            <input type="text" name="storageQuantityPath" value="{{row.storageQuantityPath}}" placeholder="system.quantity" />
+          </label>
+          <label>
+            <span>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.filters"}}</span>
+            <input type="text" name="storageFilters" value="{{row.storageFilters}}" placeholder="system.physicalItemType=currency; flags.rqg.documentRqidFlags.id=i.gear.lunars" />
+          </label>
+          <label>
+            <span>{{localize "GLITCHSMITH-LIB.currency.dialog.storage.createFromUuid"}}</span>
+            <input type="text" name="storageCreateFromUuid" value="{{row.storageCreateFromUuid}}" placeholder="Compendium.package.pack.Item.id" />
+          </label>
+          <div class="gs-cur-storage-tools">
+            <button type="button" class="gs-cur-btn" data-action="scanEmbedded">
+              <i class="fas fa-magnifying-glass"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.scan.button"}}
+            </button>
+            <button type="button" class="gs-cur-btn" data-action="testEmbedded">
+              <i class="fas fa-vial"></i> {{localize "GLITCHSMITH-LIB.currency.dialog.scan.test"}}
+            </button>
+            <span class="gs-cur-scan-hint">{{localize "GLITCHSMITH-LIB.currency.dialog.scan.hint"}}</span>
+          </div>
+          <div class="gs-cur-storage-dropzone" data-index="{{idx}}">
+            <i class="fas fa-hand-pointer"></i>
+            <span>{{localize "GLITCHSMITH-LIB.currency.dialog.scan.dropHint"}}</span>
+          </div>
+          {{#if row.scanView}}
+          <div class="gs-cur-scan-results">
+            <div class="gs-cur-scan-head">
+              <span>{{localize "GLITCHSMITH-LIB.currency.dialog.scan.results"}} — {{row.scanView.actorName}}</span>
+              <button type="button" data-action="clearScan" title="{{localize 'GLITCHSMITH-LIB.currency.dialog.scan.clear'}}">
+                <i class="fas fa-xmark"></i>
+              </button>
+            </div>
+            <div class="gs-cur-scan-toolbar">
+              <input type="search" class="gs-cur-scan-search" name="scanSearch" value="{{row.scanView.search}}"
+                placeholder="{{localize 'GLITCHSMITH-LIB.currency.dialog.scan.searchPlaceholder'}}" autocomplete="off" />
+              <span class="gs-cur-scan-count">{{row.scanView.countLabel}}</span>
+            </div>
+            <div class="gs-cur-scan-body">
+              {{#each row.scanView.items as |cand|}}
+              <div class="gs-cur-scan-item" data-candidate="{{cand.index}}">
+                {{#if cand.img}}<img src="{{cand.img}}" alt="" />{{else}}<i class="fas fa-cube"></i>{{/if}}
+                <span class="gs-cur-scan-name" title="{{cand.name}}">{{cand.name}}</span>
+                <span class="gs-cur-scan-type">{{cand.type}}</span>
+                <span class="gs-cur-scan-qty">{{cand.quantity}}</span>
+                <code class="gs-cur-scan-filters" title="{{cand.summary}}">{{cand.summary}}</code>
+                <button type="button" class="gs-cur-btn gs-cur-scan-apply" data-action="applyCandidate" data-candidate="{{cand.index}}">
+                  {{localize "GLITCHSMITH-LIB.currency.dialog.scan.apply"}}
+                </button>
+              </div>
+              {{/each}}
+              <div class="gs-cur-scan-empty" {{#unless row.scanView.isEmpty}}hidden{{/unless}}>
+                {{localize "GLITCHSMITH-LIB.currency.dialog.scan.noMatch"}}
+              </div>
+            </div>
+          </div>
+          {{/if}}
+        </div>
+        {{/if}}
       </div>
       {{else}}
       <div class="gs-cur-empty">{{localize "GLITCHSMITH-LIB.currency.dialog.sheetEmpty"}}</div>

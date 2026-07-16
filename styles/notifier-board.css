@@ -73,6 +73,14 @@
 
 .gs-nb-panel { padding: 12px 14px 0; }
 
+.gs-nb-bulk-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 10px 14px 0;
+}
+
 .gs-nb-empty {
   display: flex;
   flex-direction: column;
@@ -175,7 +183,8 @@
   justify-content: flex-end;
   flex-wrap: wrap;
 }
-.gs-nb-card-actions button {
+.gs-nb-card-actions button,
+.gs-nb-bulk-actions button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -186,7 +195,8 @@
   color: var(--color-text-primary, #fff);
   cursor: pointer;
 }
-.gs-nb-card-actions button:hover {
+.gs-nb-card-actions button:hover,
+.gs-nb-bulk-actions button:hover {
   background: var(--color-bg-btn-hover, rgba(255,255,255,0.12));
 }
 .gs-nb-card-action-primary {

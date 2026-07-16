@@ -13,9 +13,9 @@
       "dialog": {
         "title": "화폐 정의",
         "activeSystem": "현재 시스템",
-        "intro": "GlitchSmith 모듈에서 사용할 화폐를 정의합니다. 시트 화폐는 액터 데이터 경로와 매핑되고, 가상 화폐는 라이브러리에 저장되어 모든 모듈이 공유합니다.",
+        "intro": "GlitchSmith 모듈에서 사용할 화폐를 정의합니다. 시트 화폐는 액터 데이터 경로나 액터 보유 아이템 수량과 매핑할 수 있고, 가상 화폐는 라이브러리에 저장되어 모든 모듈이 공유합니다.",
         "sheetTitle": "시트 화폐",
-        "sheetHint": "액터 시트에 저장되는 화폐입니다 (예: dnd5e의 gp/sp/cp). 액터 경로는 액터 데이터의 점(.) 경로입니다.",
+        "sheetHint": "액터 시트 또는 액터 보유 아이템에 저장되는 화폐입니다. 액터 경로는 직접 actor 값을 읽을 때 사용하고, Embedded Item은 행 아래 설정을 사용합니다.",
         "sheetEmpty": "정의된 시트 화폐가 없습니다.",
         "virtualTitle": "가상 화폐",
         "virtualHint": "라이브러리가 관리하는 가상 화폐입니다. 잔고는 라이브러리에 저장되며 모든 모듈이 공유합니다.",
@@ -35,9 +35,37 @@
           "name": "이름",
           "symbol": "기호",
           "rate": "환율",
+          "storage": "저장 방식",
           "actorPath": "액터 경로",
           "integer": "정수",
           "primary": "기본"
+        },
+        "storage": {
+          "actorPath": "액터 경로",
+          "embeddedItem": "Embedded Item",
+          "itemType": "아이템 타입",
+          "quantityPath": "수량 경로",
+          "filters": "필터",
+          "createFromUuid": "생성 UUID"
+        },
+        "scan": {
+          "button": "액터 스캔",
+          "test": "테스트",
+          "hint": "토큰을 선택하거나 유저에 캐릭터를 지정한 뒤 스캔하면 아이템 기반 화폐 후보가 표시됩니다.",
+          "results": "후보",
+          "searchPlaceholder": "이름, 타입, 필터로 후보 검색...",
+          "count": "{total}개 중 {shown}개 표시",
+          "noMatch": "검색과 일치하는 후보가 없습니다.",
+          "apply": "적용",
+          "clear": "결과 지우기",
+          "summaryQty": "수량",
+          "noActor": "액터를 찾을 수 없습니다. 토큰을 선택하거나 유저에 캐릭터를 지정하세요.",
+          "empty": "{actor}에서 아이템 기반 화폐 후보를 찾지 못했습니다.",
+          "testInvalid": "테스트 전에 수량 경로와 아이템 타입 또는 필터를 입력하세요.",
+          "testSuccess": "{actor}: \"{item}\" 일치 — 수량 {quantity}.",
+          "testFail": "{actor}: 현재 설정과 일치하는 아이템이 없습니다.",
+          "dropHint": "또는 사이드바나 컴펜디엄의 화폐 아이템을 여기로 끌어다 놓으면 자동으로 채워집니다.",
+          "dropInvalid": "유효한 아이템을 끌어다 놓아야 자동으로 채워집니다."
         },
         "errors": {
           "duplicateId": "중복 화폐 ID: {id}",
@@ -47,6 +75,10 @@
     },
     "wallet": {
       "headerButton": "지갑",
+      "hideHeaderButton": {
+        "name": "시트 헤더 지갑 버튼 숨기기",
+        "hint": "이 클라이언트의 액터 시트 헤더에서 GlitchSmith Library 가상 지갑 버튼을 숨깁니다. 지갑 잔액과 API는 그대로 사용할 수 있습니다."
+      },
       "dialog": {
         "title": "가상 화폐 지갑",
         "hint": "이 액터의 가상 화폐 잔액을 조정합니다. 시트 화폐(시스템 동전)는 액터 시트에서 관리하세요.",
@@ -68,8 +100,12 @@
       "skipVersion": "이 버전 건너뛰기",
       "criticalWarning": "⚠️ 중요 업데이트 권장",
       "confirm": "확인",
+      "allConfirmButton": "모두 확인",
+      "allConfirm": "모든 알림을 확인했습니다",
       "disableNotification": "알림 끄기",
+      "allDisableButton": "모두 알림 끄기",
       "disableConfirm": "업데이트 알림이 비활성화되었습니다",
+      "allDisableConfirm": "표시 중인 모든 모듈의 업데이트 알림이 비활성화되었습니다",
       "settingsReset": "{title}: 업데이트 설정 초기화됨",
       "announcementTitle": "{title} — 공지",
       "confirmNotice": "확인",

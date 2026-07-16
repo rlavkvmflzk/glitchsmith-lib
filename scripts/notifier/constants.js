@@ -20,6 +20,11 @@ export const LEGACY_NOTIFIER_MODULES = new Set([
   "stylish-action-hud",
 ]);
 
+export const MIGRATED_LEGACY_NOTIFIER_MIN_VERSIONS = Object.freeze({
+  "stylish-action-hud": "2.5.1",
+  "cinematic-cut-ins": "2.0.0",
+});
+
 export const UPDATE_JSON_BASE_URL =
   "https://raw.githubusercontent.com/rlavkvmflzk/glitchsmith-updates/main";
 

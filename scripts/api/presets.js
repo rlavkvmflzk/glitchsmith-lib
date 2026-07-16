@@ -11,6 +11,7 @@ function normalizePrecision(options, integer) {
 
 function sheetCurrency(name, symbol, rate, actorPath, primary = false, options = {}) {
   const integer = options.integer !== false;
+  const increment = Number(options.increment);
   return {
     name,
     symbol,
@@ -21,6 +22,7 @@ function sheetCurrency(name, symbol, rate, actorPath, primary = false, options =
     icon: "",
     integer,
     precision: normalizePrecision(options, integer),
+    ...(Number.isFinite(increment) && increment > 0 ? { increment } : {}),
   };
 }
 
@@ -42,6 +44,12 @@ const BUILTIN_PRESETS = Object.freeze({
       bags:     sheetCurrency("Bags",     "bags",     100,  "system.gold.bags"),
       handfuls: sheetCurrency("Handfuls", "handfuls", 10,   "system.gold.handfuls", true),
       coins:    sheetCurrency("Coins",    "coins",    1,    "system.gold.coins"),
+    }),
+  }),
+  "cosmere-rpg": Object.freeze({
+    base: "spheres",
+    currencies: Object.freeze({
+      spheres: sheetCurrency("Spheres (Marks)", "mk", 1, "system.currency.spheres.total", true, { integer: false, precision: 1, increment: 0.2 }),
     }),
   }),
   pf1: Object.freeze({
@@ -177,5 +185,6 @@ export function buildSheetRowsFromPreset(systemId = game?.system?.id) {
     icon: c.icon ?? "",
     integer: c.integer !== false,
     precision: Number.isInteger(Number(c.precision)) ? Number(c.precision) : (c.integer === false ? 2 : 0),
+    ...(Number.isFinite(Number(c.increment)) && Number(c.increment) > 0 ? { increment: Number(c.increment) } : {}),
   }));
 }

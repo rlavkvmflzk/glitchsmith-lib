@@ -2,6 +2,7 @@ import { SOCKET_HANDLERS, SOURCES } from "../constants.js";
 import * as Definitions from "./definitions.js";
 import * as Wallets from "./wallets.js";
 import * as SheetCurrency from "./sheet-currency.js";
+import { getExchangeQuote } from "./exchange.js";
 import { getRegisteredSystemIds, getSystemPreset, registerSystemPreset } from "./presets.js";
 import { Socket } from "../socket/index.js";
 
@@ -48,6 +49,22 @@ export const currency = Object.freeze({
 
   registerSheetCurrencyDriver(systemId, driver) {
     return SheetCurrency.registerSheetCurrencyDriver(systemId, driver);
+  },
+
+  getExchangeQuote(request, options = {}) {
+    return getExchangeQuote(request, options.systemId ?? game?.system?.id);
+  },
+
+  async exchangeBalance(actor, request, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.EXCHANGE_BALANCE, {
+      ...SheetCurrency.buildActorPayload(actor, options),
+      fromCurrencyId: request?.fromCurrencyId,
+      toCurrencyId: request?.toCurrencyId,
+      amount: request?.amount,
+      feePercent: request?.feePercent ?? 0,
+      source: callerSource(options),
+      reason: callerReason(options),
+    });
   },
 
   async setDefinitions(definitions, options = {}) {
@@ -129,6 +146,15 @@ export const currency = Object.freeze({
       source: callerSource(options),
       reason: callerReason(options),
       allowNegative: options.allowNegative === true,
+    });
+  },
+
+  async modifyBalances(actorId, deltasById, options = {}) {
+    return await Socket.executeAsGM(SOCKET_HANDLERS.MODIFY_BALANCES, {
+      actorId,
+      deltasById,
+      source: callerSource(options),
+      reason: callerReason(options),
     });
   },
 

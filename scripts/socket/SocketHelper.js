@@ -8,20 +8,24 @@ function logPrefix() {
   return "GlitchSmith Library | Socket |";
 }
 
-function onMessage(message) {
+function onMessage(message, senderId) {
   if (!message || typeof message !== "object") return;
 
   if (message.type === "request") {
     if (!game.user.isGM) return;
-    handleRequest(message);
+    if (game.users?.activeGM && game.users.activeGM.id !== game.user.id) return;
+    handleRequest(message, senderId);
   } else if (message.type === "response") {
     if (message.requesterId !== game.user.id) return;
-    handleResponse(message);
+    handleResponse(message, senderId);
   }
 }
 
-async function handleRequest(message) {
-  const { handlerName, data, requestId, requesterId } = message;
+async function handleRequest(message, senderId) {
+  const { handlerName, data, requestId } = message;
+  const requesterId = typeof senderId === "string" && senderId ? senderId : "";
+  if (!requesterId) return;
+
   const handler = handlers.get(handlerName);
 
   let result;
@@ -45,9 +49,10 @@ async function handleRequest(message) {
   });
 }
 
-function handleResponse(message) {
+function handleResponse(message, senderId) {
   const pending = pendingRequests.get(message.requestId);
   if (!pending) return;
+  if (senderId !== pending.responderId || !game.users?.get(senderId)?.isGM) return;
   pendingRequests.delete(message.requestId);
   clearTimeout(pending.timeoutId);
   pending.resolve(message.result);
@@ -67,7 +72,8 @@ export function register(handlerName, handler) {
 }
 
 export async function executeAsGM(handlerName, data) {
-  if (game.user.isGM) {
+  const activeGM = game.users?.activeGM ?? null;
+  if (game.user.isGM && (!activeGM || activeGM.id === game.user.id)) {
     const handler = handlers.get(handlerName);
     if (!handler) return { success: false, error: `Unknown handler: ${handlerName}` };
     try {
@@ -79,7 +85,7 @@ export async function executeAsGM(handlerName, data) {
     }
   }
 
-  if (!game.users.activeGM) {
+  if (!activeGM) {
     return { success: false, error: "No active GM available." };
   }
 
@@ -92,7 +98,7 @@ export async function executeAsGM(handlerName, data) {
       }
     }, SOCKET_TIMEOUT_MS);
 
-    pendingRequests.set(requestId, { resolve, timeoutId });
+    pendingRequests.set(requestId, { resolve, timeoutId, responderId: activeGM.id });
 
     game.socket.emit(SOCKET_CHANNEL, {
       type: "request",

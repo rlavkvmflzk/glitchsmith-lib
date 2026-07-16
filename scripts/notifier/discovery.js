@@ -3,6 +3,7 @@ import {
   KNOWN_AUTHOR_TOKENS,
   EXPLICIT_MODULE_IDS,
   LEGACY_NOTIFIER_MODULES,
+  MIGRATED_LEGACY_NOTIFIER_MIN_VERSIONS,
   NOTIFIER_LOG_PREFIX,
 } from "./constants.js";
 
@@ -32,7 +33,12 @@ export function isGlitchSmithModule(mod) {
 }
 
 export function hasLegacyOwnNotifier(mod) {
-  return LEGACY_NOTIFIER_MODULES.has(mod.id);
+  if (!LEGACY_NOTIFIER_MODULES.has(mod.id)) return false;
+
+  const migratedFromVersion = MIGRATED_LEGACY_NOTIFIER_MIN_VERSIONS[mod.id];
+  if (!migratedFromVersion) return true;
+
+  return foundry.utils.isNewerVersion(migratedFromVersion, mod.version || "0.0.0");
 }
 
 export function enumerateNotifierTargets() {

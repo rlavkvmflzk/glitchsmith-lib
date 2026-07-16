@@ -6,6 +6,7 @@ export const SETTING_KEYS = Object.freeze({
   CURRENCY_DEFINITIONS: "currency.definitions",
   CURRENCY_WALLETS: "currency.wallets",
   CURRENCY_MIGRATION_STATE: "currency.migrationState",
+  WALLET_HIDE_HEADER_BUTTON: "wallet.hideHeaderButton",
 });
 
 export const HOOKS = Object.freeze({
@@ -19,6 +20,7 @@ export const HOOKS = Object.freeze({
 export const SOCKET_HANDLERS = Object.freeze({
   SET_DEFINITIONS: "currency.setDefinitions",
   MODIFY_BALANCE: "currency.modifyBalance",
+  MODIFY_BALANCES: "currency.modifyBalances",
   SET_BALANCE: "currency.setBalance",
   TRANSFER_BALANCE: "currency.transferBalance",
   BULK_IMPORT: "currency.bulkImport",
@@ -26,6 +28,7 @@ export const SOCKET_HANDLERS = Object.freeze({
   MODIFY_SHEET_BALANCE: "currency.modifySheetBalance",
   SET_SHEET_BALANCES: "currency.setSheetBalances",
   MODIFY_SHEET_BALANCES: "currency.modifySheetBalances",
+  EXCHANGE_BALANCE: "currency.exchangeBalance",
 });
 
 export const DEFAULT_DEFINITIONS = Object.freeze({
