@@ -13,9 +13,22 @@ export const SETTING_KEYS = Object.freeze({
 export const HOOKS = Object.freeze({
   CURRENCY_BALANCE_CHANGED: `${MODULE_ID}.currency.balanceChanged`,
   CURRENCY_DEFINITIONS_CHANGED: `${MODULE_ID}.currency.definitionsChanged`,
+  REGISTER_ACTOR_METRIC_PROVIDERS: `${MODULE_ID}.registerActorMetricProviders`,
   REGISTER_SHEET_CURRENCY_DRIVERS: `${MODULE_ID}.registerSheetCurrencyDrivers`,
   REGISTER_SYSTEM_PRESETS: `${MODULE_ID}.registerSystemPresets`,
   READY: `${MODULE_ID}.ready`,
+});
+
+export const ACTOR_METRIC_PROVIDER_IDS = Object.freeze({
+  GENERIC: "builtin.generic",
+  DND5E: "builtin.dnd5e",
+  PF2E: "builtin.pf2e",
+});
+
+export const ACTOR_METRIC_READ_MODES = Object.freeze({
+  AUTO: "auto",
+  DIRECT: "direct",
+  VALUE: "value",
 });
 
 export const SOCKET_HANDLERS = Object.freeze({

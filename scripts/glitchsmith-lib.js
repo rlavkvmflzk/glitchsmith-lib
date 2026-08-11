@@ -14,6 +14,11 @@ import {
 
 Hooks.once("init", () => {
   console.log(`${MODULE_ID} | init`);
+  const api = exposeApi();
+  Hooks.callAll(HOOKS.REGISTER_ACTOR_METRIC_PROVIDERS, {
+    actorMetrics: api?.actorMetrics ?? null,
+    register: (...args) => api?.actorMetrics?.registerProvider(...args),
+  });
   registerSettings();
   registerNotifierSettingsForTargets();
   registerSheetHeader();
