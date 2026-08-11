@@ -1,6 +1,18 @@
 # Changelog
 
-## [Unreleased]
+## [0.11.0] - 2026-07-29
+
+### 🛠 UI
+- **Unified GlitchSmith Actor menu**: Actor sheet controls from GlitchSmith modules are now collected under one `GlitchSmith` dropdown. This includes Wallet, Cinematic FX, HUD Overlay URL, VN Portrait Config, Shop Settings, Relationship Manager, and Relationship Archive when their modules and permission checks make them available.
+- **Client preference**: The unified menu is enabled by default. Each user can restore the separate header controls from **Game Settings > GlitchSmith Library > Combine GlitchSmith Actor sheet menus**; changing the option requires a reload.
+
+### 🔌 API
+- **Actor menu registry**: Added `api.actorSheetMenu.registerControl()`, `unregisterControl()`, and `isEnabled()` so GlitchSmith modules can participate in the shared Actor menu without duplicating consolidation logic.
+
+### 🧩 Compatibility
+- **Foundry V13 and V14 sheets**: The shared menu supports legacy Actor sheets and Application V2 headers while preserving the original control labels, icons, visibility checks, permissions, and click handlers.
+
+## [0.10.0] - 2026-07-17
 
 ### ✨ New Features
 - **Shared currency exchange API**: Added `currency.getExchangeQuote()` and `currency.exchangeBalance()` for rate-based conversion across shared currency definitions. Quotes support virtual, sheet, and mixed storage types; direct commits are atomic for virtual wallets and path-backed sheet currency pairs, while mixed-storage callers receive a quote to coordinate in their own store.

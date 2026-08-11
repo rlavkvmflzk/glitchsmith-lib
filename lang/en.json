@@ -90,6 +90,13 @@
         "saveErrors": "Some balances failed to save: {errors}"
       }
     },
+    "actorSheetMenu": {
+      "label": "GlitchSmith",
+      "setting": {
+        "name": "Combine GlitchSmith Actor sheet menus",
+        "hint": "Collect Actor sheet header controls added by GlitchSmith modules into a single GlitchSmith dropdown on this client. Enabled by default."
+      }
+    },
     "notifier": {
       "disableName": "Disable update notifications",
       "disableHint": "Suppress this module's update and announcement dialogs.",

@@ -7,6 +7,7 @@ export const SETTING_KEYS = Object.freeze({
   CURRENCY_WALLETS: "currency.wallets",
   CURRENCY_MIGRATION_STATE: "currency.migrationState",
   WALLET_HIDE_HEADER_BUTTON: "wallet.hideHeaderButton",
+  ACTOR_SHEET_MENU_CONSOLIDATE: "actorSheetMenu.consolidate",
 });
 
 export const HOOKS = Object.freeze({

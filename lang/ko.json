@@ -90,6 +90,13 @@
         "saveErrors": "일부 잔액 저장에 실패했습니다: {errors}"
       }
     },
+    "actorSheetMenu": {
+      "label": "GlitchSmith",
+      "setting": {
+        "name": "GlitchSmith 액터 시트 메뉴 통합",
+        "hint": "GlitchSmith 모듈이 액터 시트 헤더에 추가한 메뉴를 이 클라이언트에서 하나의 GlitchSmith 드롭다운으로 모읍니다. 기본값은 켜짐입니다."
+      }
+    },
     "notifier": {
       "disableName": "업데이트 알림 끄기",
       "disableHint": "이 모듈의 업데이트 및 공지 다이얼로그를 표시하지 않습니다.",

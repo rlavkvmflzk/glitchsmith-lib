@@ -36,6 +36,16 @@ export function registerSettings() {
     default: false,
   });
 
+  game.settings.register(MODULE_ID, SETTING_KEYS.ACTOR_SHEET_MENU_CONSOLIDATE, {
+    name: "GLITCHSMITH-LIB.actorSheetMenu.setting.name",
+    hint: "GLITCHSMITH-LIB.actorSheetMenu.setting.hint",
+    scope: "client",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.registerMenu(MODULE_ID, "currencyDefinitions", {
     name: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.name"),
     label: game.i18n.localize("GLITCHSMITH-LIB.currency.menu.label"),

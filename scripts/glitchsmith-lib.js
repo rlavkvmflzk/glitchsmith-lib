@@ -6,6 +6,7 @@ import { applyDecimalPresetMigration } from "./api/preset-migrations.js";
 import { registerSystemPreset } from "./api/presets.js";
 import { registerSheetCurrencyDriver } from "./api/sheet-currency.js";
 import { registerSheetHeader } from "./ui/sheet-header.js";
+import { registerActorSheetMenuHooks } from "./ui/actor-sheet-menu.js";
 import {
   registerNotifierSettingsForTargets,
   runAutoDiscovery,
@@ -29,6 +30,7 @@ Hooks.once("ready", async () => {
   registerSocketHandlers();
   const api = exposeApi();
   Hooks.callAll(HOOKS.READY, { api });
+  setTimeout(registerActorSheetMenuHooks, 0);
   await applyDecimalPresetMigration();
   await runAutoDiscovery();
 });
