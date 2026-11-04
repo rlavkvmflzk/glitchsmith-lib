@@ -122,7 +122,12 @@ async function performExchangeBalance({
       const errorCode = result.errorCode ?? (result.error === "Insufficient balance."
         ? "INSUFFICIENT_BALANCE"
         : "SHEET_EXCHANGE_FAILED");
-      return failure(errorCode, result.error ?? "Sheet currency exchange failed.", { quote });
+      return failure(errorCode, result.error ?? "Sheet currency exchange failed.", {
+        quote,
+        ...(result.commitUnknown ? { commitUnknown: true } : {}),
+        ...(result.postCommitError ? { postCommitError: true } : {}),
+        ...(result.partialCommit ? { partialCommit: true } : {}),
+      });
     }
     return {
       success: true,

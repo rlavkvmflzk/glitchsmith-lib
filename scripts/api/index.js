@@ -12,6 +12,7 @@ import { currency } from "./currency.js";
 import { time } from "./time.js";
 import { actorSheetMenu } from "../ui/actor-sheet-menu.js";
 import { actorMetrics } from "./actor-metrics.js";
+import { menuExtensions } from "./menu-extensions.js";
 
 let exposedApi = null;
 
@@ -29,6 +30,7 @@ export function exposeApi() {
 
   const api = Object.freeze({
     actorMetrics,
+    menuExtensions,
     currency,
     time,
     actorSheetMenu,

@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.13.1] - 2026-11-02
+
+### ✨ Improvements
+- **Library version guidance**: On joining a world, GMs receive one notice when installed modules require a newer GlitchSmith Library. It lists the installed version, each module's minimum requirement, and update instructions. The check includes modules Foundry disabled because of the mismatch and works without network access or release notifications enabled.
+
+### 🐛 Fixes
+- **Custom calendar time units**: The shared clock now reads day, hour, and minute lengths from Simple Calendar, Simple Calendar Reborn, Calendaria, Seasons & Stars, and Foundry calendars, including calendars used by Simple Timekeeping. External calendars retain these units when read through Smartphone Widget. Dependent modules can accept hours beyond 23 without treating the clock as unavailable.
+- **Calendar changes**: Clock subscribers refresh when supported calendars are edited or switched, including Simple Calendar changes received from another GM.
+- **Calendar durations**: Duration and remaining-time calculations use the active calendar's time units. Simple Calendar's own interval calculation remains in use for its dates.
+
+## [0.12.0] - 2026-08-14
+
+### 🔌 API
+- **Shared Actor metrics service**: Added `api.actorMetrics` with `read()`, `defaults()`, and `discover()` for system-aware Actor values. Built-in providers cover D&D5e, PF2e, and generic Actor data, including health, resources, item uses or quantities, movement, shields, and spellcasting values where supported.
+- **Actor metric provider registry**: System and add-on integrations can register priority-based metric providers through the new `glitchsmith-lib.registerActorMetricProviders` hook. Compatibility checks and generic fallback let dependent modules request metrics without hard-coding each game system.
+
+### 🔒 Reliability
+- **Safe metric reads and discovery**: Actor metric results are normalized into stable public definitions. Generic discovery is bounded, cycle-safe, and JSON-safe, while invalid values, provider failures, and recursive provider calls fall back without exposing provider-private data.
+
+### 🧩 Compatibility
+- **Stable startup API**: The same frozen GlitchSmith Library API object is preserved from `init` through `ready`, allowing dependent modules to register metric providers during initialization and retain their original API reference.
+
 ## [0.11.0] - 2026-07-29
 
 ### 🛠 UI

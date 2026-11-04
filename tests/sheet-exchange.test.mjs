@@ -101,6 +101,7 @@ test("strict sheet exchange rejects a misaligned source balance before writing",
 
   assert.equal(result.success, false);
   assert.equal(result.errorCode, "INVALID_SHEET_BALANCE");
+  assert.equal(result.commitUnknown, undefined);
   assert.equal(actor.updateCount, 0);
   assert.deepEqual(actor.system, { gold: 10.5, silver: 0 });
 });
@@ -143,4 +144,39 @@ test("aborts when a sheet balance changes between validation and the Actor updat
   assert.equal(result.errorCode, "BALANCE_CHANGED");
   assert.equal(actor.updateCount, 0);
   assert.deepEqual(actor.system, { gold: 20, silver: 0 });
+});
+
+test("a lost Actor update response is reported as uncertain after the sheet changed", async t => {
+  actor.system = { gold: 10, silver: 0 };
+  actor.updateCount = 0;
+  const update = actor.update;
+  t.mock.method(actor, "update", async function(updates) {
+    await update.call(this, updates);
+    throw new Error("Actor update response lost");
+  });
+
+  const result = await exchangeDeltas();
+
+  assert.equal(result.success, false);
+  assert.equal(result.commitUnknown, true);
+  assert.equal(result.postCommitError, true);
+  assert.equal(actor.updateCount, 1);
+  assert.deepEqual(actor.system, { gold: 9, silver: 0.05 });
+});
+
+test("an Actor update rejection is not treated as safe to repeat automatically", async t => {
+  actor.system = { gold: 10, silver: 0 };
+  actor.updateCount = 0;
+  t.mock.method(actor, "update", async function() {
+    this.updateCount += 1;
+    throw new Error("Connection closed during update");
+  });
+
+  const result = await exchangeDeltas();
+
+  assert.equal(result.success, false);
+  assert.equal(result.commitUnknown, true);
+  assert.equal(result.postCommitError, true);
+  assert.equal(actor.updateCount, 1);
+  assert.deepEqual(actor.system, { gold: 10, silver: 0 });
 });

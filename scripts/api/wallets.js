@@ -1,16 +1,20 @@
-import { SETTING_KEYS, CURRENCY_TYPES } from "../constants.js";
-import { getSetting, setSetting } from "../settings/index.js";
+import { CURRENCY_TYPES } from "../constants.js";
 import { getCurrency } from "./definitions.js";
 import { fireBalanceChanged } from "./hooks.js";
 import { getCurrencyIncrement } from "./exchange-math.js";
+import { WalletStore } from "./wallet-store.js";
 
 function clone(value) {
   return foundry.utils.deepClone(value);
 }
 
-function readAllWallets() {
-  const stored = getSetting(SETTING_KEYS.CURRENCY_WALLETS);
+function readAllWallets(draft = false) {
+  const stored = WalletStore.get({ draft });
   return stored && typeof stored === "object" ? clone(stored) : {};
+}
+
+function emitBalanceChanged(payload) {
+  WalletStore.afterCommit(() => fireBalanceChanged(payload));
 }
 
 export function getAllWallets() {
@@ -88,7 +92,7 @@ function deltaMatchesIncrement(actual, expected, def) {
 
 /**
  * Atomically exchange two virtual currencies in one actor wallet. Both balance
- * changes are persisted in a single world-setting write.
+ * changes are persisted in a single wallet transaction.
  */
 export async function writeExchangeBalances({
   actorId,
@@ -115,7 +119,7 @@ export async function writeExchangeBalances({
     return { success: false, errorCode: "INVALID_AMOUNT", error: "Exchange amounts must be positive finite numbers." };
   }
 
-  const wallets = readAllWallets();
+  const wallets = readAllWallets(true);
   const fromBefore = readBalance(wallets, actorId, fromCurrencyId);
   const toBefore = readBalance(wallets, actorId, toCurrencyId);
   if (!balanceMatchesIncrement(fromBefore, fromCheck.def) || !balanceMatchesIncrement(toBefore, toCheck.def)) {
@@ -160,10 +164,10 @@ export async function writeExchangeBalances({
   }
   writeBalance(wallets, actorId, fromCurrencyId, fromAfter);
   writeBalance(wallets, actorId, toCurrencyId, toAfter);
-  await setSetting(SETTING_KEYS.CURRENCY_WALLETS, wallets);
+  await WalletStore.replace(wallets);
 
-  fireBalanceChanged({ actorId, currencyId: fromCurrencyId, before: fromBefore, after: fromAfter, source, reason });
-  fireBalanceChanged({ actorId, currencyId: toCurrencyId, before: toBefore, after: toAfter, source, reason });
+  emitBalanceChanged({ actorId, currencyId: fromCurrencyId, before: fromBefore, after: fromAfter, source, reason });
+  emitBalanceChanged({ actorId, currencyId: toCurrencyId, before: toBefore, after: toAfter, source, reason });
 
   return {
     success: true,
@@ -190,17 +194,17 @@ export async function writeSetBalance({
   }
   const next = normalizeBalanceValue(numeric, check.def);
 
-  const wallets = readAllWallets();
+  const wallets = readAllWallets(true);
   const before = readBalance(wallets, actorId, currencyId);
   if (before === next) {
     return { success: true, before, after: next, unchanged: true };
   }
 
   writeBalance(wallets, actorId, currencyId, next);
-  await setSetting(SETTING_KEYS.CURRENCY_WALLETS, wallets);
+  await WalletStore.replace(wallets);
 
   if (!silent) {
-    fireBalanceChanged({ actorId, currencyId, before, after: next, source, reason });
+    emitBalanceChanged({ actorId, currencyId, before, after: next, source, reason });
   }
   return { success: true, before, after: next };
 }
@@ -223,7 +227,7 @@ export async function writeModifyBalance({
     return { success: false, error: "delta must be a finite number." };
   }
 
-  const wallets = readAllWallets();
+  const wallets = readAllWallets(true);
   const before = readBalance(wallets, actorId, currencyId);
   const after = before + numericDelta;
 
@@ -242,17 +246,17 @@ export async function writeModifyBalance({
   }
 
   writeBalance(wallets, actorId, currencyId, next);
-  await setSetting(SETTING_KEYS.CURRENCY_WALLETS, wallets);
+  await WalletStore.replace(wallets);
 
   if (!silent) {
-    fireBalanceChanged({ actorId, currencyId, before, after: next, source, reason });
+    emitBalanceChanged({ actorId, currencyId, before, after: next, source, reason });
   }
   return { success: true, before, after: next };
 }
 
 /**
  * Apply several virtual-currency deltas to one actor wallet in a single
- * world-setting write. The full batch is validated before any value is saved.
+ * wallet transaction. The full batch is validated before any value is saved.
  */
 export async function writeModifyBalances({
   actorId,
@@ -271,7 +275,7 @@ export async function writeModifyBalances({
     return { success: false, error: "deltasById must contain at least one currency." };
   }
 
-  const wallets = readAllWallets();
+  const wallets = readAllWallets(true);
   const before = {};
   const after = {};
 
@@ -331,11 +335,11 @@ export async function writeModifyBalances({
   for (const currencyId of changed) {
     writeBalance(wallets, actorId, currencyId, after[currencyId]);
   }
-  await setSetting(SETTING_KEYS.CURRENCY_WALLETS, wallets);
+  await WalletStore.replace(wallets);
 
   if (!silent) {
     for (const currencyId of changed) {
-      fireBalanceChanged({
+      emitBalanceChanged({
         actorId,
         currencyId,
         before: before[currencyId],
@@ -416,7 +420,7 @@ export async function writeBulkImport({
     return { success: false, error: `mode must be one of: ${[...validModes].join(", ")}` };
   }
 
-  const before = readAllWallets();
+  const before = readAllWallets(true);
   const next = mode === "replace" ? {} : clone(before);
 
   for (const [actorId, wallet] of Object.entries(incomingWallets)) {
@@ -431,13 +435,13 @@ export async function writeBulkImport({
     }
   }
 
-  await setSetting(SETTING_KEYS.CURRENCY_WALLETS, next);
+  await WalletStore.replace(next, { full: mode === "replace" });
 
   for (const [actorId, wallet] of Object.entries(next)) {
     for (const [currencyId, after] of Object.entries(wallet)) {
       const previous = before[actorId]?.[currencyId] ?? 0;
       if (previous !== after) {
-        fireBalanceChanged({ actorId, currencyId, before: previous, after, source, reason });
+        emitBalanceChanged({ actorId, currencyId, before: previous, after, source, reason });
       }
     }
   }

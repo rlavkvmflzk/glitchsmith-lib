@@ -129,6 +129,16 @@ export const currency = Object.freeze({
     });
   },
 
+  async modifyOwnedSheetBalances(actor, deltasById, options = {}) {
+    const payload = typeof actor === "string"
+      ? { actorId: actor, actorUuid: "", systemId: options.systemId ?? game?.system?.id }
+      : SheetCurrency.buildActorPayload(actor, options);
+    return Socket.executeAsOwner("currency.modifyOwnedSheetBalances", {
+      ...payload, deltasById, operationId: options.operationId || foundry.utils.randomID(),
+      source: callerSource(options), reason: callerReason(options),
+    });
+  },
+
   async setSheetBalances(actor, balancesById, options = {}) {
     return await Socket.executeAsGM(SOCKET_HANDLERS.SET_SHEET_BALANCES, {
       ...SheetCurrency.buildActorPayload(actor, options),
@@ -155,6 +165,13 @@ export const currency = Object.freeze({
       deltasById,
       source: callerSource(options),
       reason: callerReason(options),
+    });
+  },
+
+  async modifyOwnedBalances(actorId, deltasById, options = {}) {
+    return Socket.executeAsCoordinator("currency.modifyOwnedBalances", {
+      actorId, deltasById, operationId: options.operationId || foundry.utils.randomID(),
+      source: callerSource(options), reason: callerReason(options),
     });
   },
 

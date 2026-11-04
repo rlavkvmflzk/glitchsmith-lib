@@ -4,6 +4,15 @@
       "title": "GlitchSmith 라이브러리",
       "description": "GlitchSmith 모듈들이 공통으로 쓰는 백엔드 라이브러리입니다. 다른 GlitchSmith 패키지가 의존성으로 자동 설치하며, 단독으로 사용하는 모듈은 아닙니다."
     },
+    "libraryVersion": {
+      "title": "GlitchSmith Library 업데이트 필요",
+      "intro": "다음 모듈을 사용하려면 GlitchSmith Library {required} 이상이 필요합니다.",
+      "current": "설치된 라이브러리 버전: {current}",
+      "module": "모듈",
+      "minimum": "필요한 라이브러리 버전",
+      "instructions": "Foundry 초기 설정(Setup) 화면의 애드온 모듈에서 GlitchSmith Library를 업데이트하세요. 업데이트 후 월드에 다시 접속하고, 모듈 관리에서 사용하려는 모듈이 활성화되어 있는지 확인하세요. Foundry가 버전이 맞지 않는 모듈을 비활성화했을 수 있습니다.",
+      "acknowledge": "확인"
+    },
     "currency": {
       "menu": {
         "name": "화폐 정의",

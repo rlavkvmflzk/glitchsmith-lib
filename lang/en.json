@@ -4,6 +4,15 @@
       "title": "GlitchSmith Library",
       "description": "Shared backend services for GlitchSmith modules. Installed automatically as a dependency by other GlitchSmith packages. Not intended for standalone use."
     },
+    "libraryVersion": {
+      "title": "GlitchSmith Library Update Required",
+      "intro": "To use the following modules, update GlitchSmith Library to version {required} or later.",
+      "current": "Installed library version: {current}",
+      "module": "Module",
+      "minimum": "Required library version",
+      "instructions": "Update GlitchSmith Library under Add-on Modules on the Foundry Setup screen. Then rejoin the world and check that the modules you want to use are enabled in Manage Modules. Foundry may have disabled modules whose requirements were not met.",
+      "acknowledge": "OK"
+    },
     "currency": {
       "menu": {
         "name": "Currency Definitions",

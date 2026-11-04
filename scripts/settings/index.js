@@ -1,8 +1,10 @@
 import { MODULE_ID, SETTING_KEYS, DEFAULT_DEFINITIONS } from "../constants.js";
 import { NotifierBoardLauncher } from "../notifier/manager.js";
 import { CurrencyDefinitionsDialog } from "../apps/CurrencyDefinitionsDialog.js";
+import { WalletStore } from "../api/wallet-store.js";
 
 export function registerSettings() {
+  WalletStore.registerSettings();
   game.settings.register(MODULE_ID, SETTING_KEYS.CURRENCY_DEFINITIONS, {
     name: "Currency Definitions",
     scope: "world",

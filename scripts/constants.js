@@ -14,8 +14,10 @@ export const HOOKS = Object.freeze({
   CURRENCY_BALANCE_CHANGED: `${MODULE_ID}.currency.balanceChanged`,
   CURRENCY_DEFINITIONS_CHANGED: `${MODULE_ID}.currency.definitionsChanged`,
   REGISTER_ACTOR_METRIC_PROVIDERS: `${MODULE_ID}.registerActorMetricProviders`,
+  REGISTER_MENU_EXTENSIONS: `${MODULE_ID}.registerMenuExtensions`,
   REGISTER_SHEET_CURRENCY_DRIVERS: `${MODULE_ID}.registerSheetCurrencyDrivers`,
   REGISTER_SYSTEM_PRESETS: `${MODULE_ID}.registerSystemPresets`,
+  MENU_EXTENSIONS_CHANGED: `${MODULE_ID}.menuExtensionsChanged`,
   READY: `${MODULE_ID}.ready`,
 });
 

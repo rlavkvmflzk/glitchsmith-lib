@@ -182,7 +182,7 @@ const pathDriver = Object.freeze({
     return readPathValue(actor, def.actorPath);
   },
 
-  async setBalances(actor, targetBalancesById, defsById) {
+  async setBalances(actor, targetBalancesById, defsById, options = {}) {
     if (!actor) throw new Error("Actor not found.");
     const updates = {};
     for (const [currencyId, target] of Object.entries(targetBalancesById ?? {})) {
@@ -193,6 +193,7 @@ const pathDriver = Object.freeze({
       if (current !== target) updates[def.actorPath] = target;
     }
     if (Object.keys(updates).length > 0) {
+      options.onWrite?.();
       await actor.update(updates);
     }
   },
@@ -231,7 +232,7 @@ export function matchEmbeddedItemForActor(actor, storageRaw) {
   };
 }
 
-async function createEmbeddedCurrencyItem(actor, currencyId, storage, target) {
+async function createEmbeddedCurrencyItem(actor, currencyId, storage, target, options = {}) {
   if (!storage.createFromUuid) throw new Error(`MISSING_CURRENCY_ITEM_${currencyId}`);
 
   const source = await fromUuid(storage.createFromUuid);
@@ -242,6 +243,7 @@ async function createEmbeddedCurrencyItem(actor, currencyId, storage, target) {
   const data = source.toObject();
   delete data._id;
   foundry.utils.setProperty(data, storage.quantityPath, target);
+  options.onWrite?.();
   await actor.createEmbeddedDocuments("Item", [data]);
 }
 
@@ -254,7 +256,7 @@ const embeddedItemDriver = Object.freeze({
     return item ? readPathValue(item, storage.quantityPath) : 0;
   },
 
-  async setBalances(actor, targetBalancesById, defsById) {
+  async setBalances(actor, targetBalancesById, defsById, options = {}) {
     if (!actor) throw new Error("Actor not found.");
     const updates = [];
 
@@ -268,7 +270,7 @@ const embeddedItemDriver = Object.freeze({
       const item = findEmbeddedCurrencyItem(actor, def);
       if (!item) {
         if (target === 0) continue;
-        await createEmbeddedCurrencyItem(actor, currencyId, storage, target);
+        await createEmbeddedCurrencyItem(actor, currencyId, storage, target, options);
         continue;
       }
 
@@ -281,6 +283,7 @@ const embeddedItemDriver = Object.freeze({
     }
 
     if (updates.length > 0) {
+      options.onWrite?.();
       await actor.updateEmbeddedDocuments("Item", updates);
     }
   },
@@ -301,9 +304,9 @@ const pf2eDriver = Object.freeze({
     return pathDriver.readBalance(actor, currencyId, def);
   },
 
-  async setBalances(actor, targetBalancesById, defsById) {
+  async setBalances(actor, targetBalancesById, defsById, options = {}) {
     if (!hasCoinApi(actor)) {
-      return pathDriver.setBalances(actor, targetBalancesById, defsById);
+      return pathDriver.setBalances(actor, targetBalancesById, defsById, options);
     }
 
     const snapshot = {};
@@ -320,8 +323,10 @@ const pf2eDriver = Object.freeze({
 
       const id = String(currencyId).toLowerCase();
       if (delta > 0) {
+        options.onWrite?.();
         await actor.inventory.addCoins({ [id]: delta });
       } else {
+        options.onWrite?.();
         const success = await actor.inventory.removeCoins({ [id]: -delta }, { byValue: false });
         if (success === false) throw new Error("Insufficient balance.");
       }
@@ -356,7 +361,7 @@ const wfrp4eDriver = Object.freeze({
     return item ? readPathValue(item, "system.quantity.value") : 0;
   },
 
-  async setBalances(actor, targetBalancesById, defsById) {
+  async setBalances(actor, targetBalancesById, defsById, options = {}) {
     if (!actor) throw new Error("Actor not found.");
     const updates = [];
 
@@ -376,6 +381,7 @@ const wfrp4eDriver = Object.freeze({
     }
 
     if (updates.length > 0) {
+      options.onWrite?.();
       await actor.updateEmbeddedDocuments("Item", updates);
     }
   },
@@ -472,7 +478,7 @@ const cosmereRpgDriver = Object.freeze({
     return roundDecimal(total, def?.precision ?? 1);
   },
 
-  async setBalances(actor, targetBalancesById, defsById) {
+  async setBalances(actor, targetBalancesById, defsById, options = {}) {
     if (!actor) throw new Error("Actor not found.");
     if (!Object.hasOwn(targetBalancesById ?? {}, "spheres")) return;
     if (!defsById.spheres) throw new Error("Currency 'spheres' is not a sheet currency.");
@@ -513,9 +519,9 @@ const cosmereRpgDriver = Object.freeze({
       }
     }
 
-    if (deleteIds.length > 0) await actor.deleteEmbeddedDocuments("Item", deleteIds);
-    if (updates.length > 0) await actor.updateEmbeddedDocuments("Item", updates);
-    if (creates.length > 0) await actor.createEmbeddedDocuments("Item", creates);
+    if (deleteIds.length > 0) { options.onWrite?.(); await actor.deleteEmbeddedDocuments("Item", deleteIds); }
+    if (updates.length > 0) { options.onWrite?.(); await actor.updateEmbeddedDocuments("Item", updates); }
+    if (creates.length > 0) { options.onWrite?.(); await actor.createEmbeddedDocuments("Item", creates); }
   },
 });
 
@@ -614,6 +620,8 @@ export async function writeSetSheetBalances({
   const targets = {};
   const before = {};
   const after = {};
+  let writeStarted = false;
+  const writeOptions = { onWrite: () => { writeStarted = true; } };
 
   try {
     assertSheetCurrencyWritePermission(actor, requesterId);
@@ -637,12 +645,16 @@ export async function writeSetSheetBalances({
     }
 
     for (const [driver, driverTargets] of groupBalancesByDriver(id, targets, defs)) {
-      await driver.setBalances(actor, driverTargets, defs);
+      // Third-party drivers may not implement the optional progress callback.
+      if (![pathDriver, embeddedItemDriver, pf2eDriver, wfrp4eDriver, cosmereRpgDriver].includes(driver)) writeOptions.onWrite();
+      await driver.setBalances(actor, driverTargets, defs, writeOptions);
     }
   } catch (err) {
     return {
       success: false,
       ...(err?.errorCode ? { errorCode: err.errorCode } : {}),
+      ...(writeStarted ? { commitUnknown: true, postCommitError: true } : {}),
+      ...(err?.partialCommit ? { partialCommit: true } : {}),
       error: err?.message ?? String(err),
       before,
       after: before,

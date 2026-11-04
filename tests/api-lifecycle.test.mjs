@@ -23,11 +23,14 @@ test("init and ready exposure reuse the same API object", () => {
   const initApi = exposeApi();
   assert.equal(moduleRecord.api, initApi);
   assert.equal(typeof initApi.actorMetrics.read, "function");
+  assert.equal(typeof initApi.menuExtensions.registerProvider, "function");
+  assert.equal(typeof initApi.menuExtensions.loadPage, "function");
   assert.equal(initApi.constants.ACTOR_METRIC_PROVIDER_IDS.GENERIC, "builtin.generic");
   assert.equal(initApi.constants.ACTOR_METRIC_READ_MODES.DIRECT, "direct");
 
   moduleRecord.api = null;
   const readyApi = exposeApi();
   assert.equal(readyApi, initApi);
+  assert.equal(readyApi.menuExtensions, initApi.menuExtensions);
   assert.equal(moduleRecord.api, initApi);
 });

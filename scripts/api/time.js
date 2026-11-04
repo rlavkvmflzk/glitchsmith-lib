@@ -34,6 +34,10 @@ const CHANGE_HOOKS = [
   "updateWorldTime",
   "simple-calendar-date-time-change",
   "calendaria.dateTimeChange",
+  "calendaria.calendarSwitched",
+  "calendaria.calendarUpdated",
+  "seasons-stars:dateChanged",
+  "seasons-stars:calendarChanged",
 ];
 
 const DEFAULT_MONTHS = Object.freeze([
@@ -150,7 +154,17 @@ function _coreCalendarStructure() {
   return _normalizeCalendarStructure({
     months: calendar.months?.values ?? [],
     weekdays: calendar.days?.values ?? [],
+    ..._foundryCalendarUnits(calendar),
   });
+}
+
+/** Foundry's CalendarData and Calendaria keep time units in the days schema. */
+function _foundryCalendarUnits(calendar) {
+  return {
+    hoursInDay: calendar?.days?.hoursPerDay,
+    minutesInHour: calendar?.days?.minutesPerHour,
+    secondsInMinute: calendar?.days?.secondsPerMinute,
+  };
 }
 
 function _isLeapByRule(year, rule) {
@@ -415,22 +429,26 @@ export function getDateParts(ts) {
 }
 
 export function getCalendarStructure() {
+  const source = sourceId();
   try {
     const phone = _phoneTime();
-    if (phone) {
+    // The phone's external-calendar summary contains month/weekday labels only.
+    // Read time units from the selected provider, even when the phone mediates it.
+    if (phone && source === TIME_SOURCES.SMARTPHONE_INTERNAL) {
       const raw = phone.getCalendarConfig?.() ?? phone.getConfig?.() ?? {};
-      return { sourceId: sourceId(), ..._normalizeCalendarStructure(raw) };
+      return { sourceId: source, ..._normalizeCalendarStructure(raw) };
     }
-    switch (sourceId()) {
+    switch (source) {
       case TIME_SOURCES.SIMPLE_CALENDAR:
       case TIME_SOURCES.SIMPLE_CALENDAR_REBORN: {
         const api = _scApi();
         if (api) {
           return {
-            sourceId: sourceId(),
+            sourceId: source,
             ..._normalizeCalendarStructure({
               months: api.getAllMonths?.() ?? [],
               weekdays: api.getAllWeekdays?.() ?? [],
+              ...api.getTimeConfiguration?.(),
             }),
           };
         }
@@ -438,22 +456,26 @@ export function getCalendarStructure() {
       }
       case TIME_SOURCES.CALENDARIA: {
         const cal = globalThis.CALENDARIA?.api?.getActiveCalendar?.() ?? null;
-        if (cal) return { sourceId: sourceId(), ..._normalizeCalendarStructure({ months: cal.monthsArray ?? [], weekdays: cal.weekdaysArray ?? [] }) };
+        if (cal) return { sourceId: source, ..._normalizeCalendarStructure({
+          months: cal.monthsArray ?? [], weekdays: cal.weekdaysArray ?? [], ..._foundryCalendarUnits(cal),
+        }) };
         break;
       }
       case TIME_SOURCES.SEASONS_AND_STARS: {
         const cal = game.seasonsStars?.api?.getActiveCalendar?.() ?? null;
-        if (cal) return { sourceId: sourceId(), ..._normalizeCalendarStructure({ months: cal.months ?? [], weekdays: cal.weekdays ?? [] }) };
+        if (cal) return { sourceId: source, ..._normalizeCalendarStructure({
+          months: cal.months ?? [], weekdays: cal.weekdays ?? [], ...cal.time,
+        }) };
         break;
       }
       case TIME_SOURCES.SIMPLE_TIMEKEEPING:
       case TIME_SOURCES.CORE:
-        return { sourceId: sourceId(), ..._coreCalendarStructure() };
+        return { sourceId: source, ..._coreCalendarStructure() };
     }
   } catch (e) {
     console.error("GlitchSmith Library | time.getCalendarStructure failed:", e);
   }
-  return { sourceId: sourceId(), ..._normalizeCalendarStructure() };
+  return { sourceId: source, ..._normalizeCalendarStructure() };
 }
 
 export function partsToTimestamp(parts) {
@@ -545,29 +567,16 @@ export function format(ts, pattern = "YYYY-MM-DD HH:mm") {
 }
 
 /**
- * Seconds per minute/hour/day for the active source. The smartphone's
- * independent clock exposes its configured day shape; Simple Calendar
- * durations go through `timestampPlusInterval` in `addDuration` instead;
- * other sources follow SmartphoneTime's own 86400s/day convention.
+ * Seconds per minute/hour/day on the selected calendar's time axis.
+ * Simple Calendar duration arithmetic still uses its interval API below.
  */
 function _unitSeconds() {
-  try {
-    const phone = _phoneTime();
-    if (phone && phone.getTimeSource?.() === "internal") {
-      const cfg = phone.getConfig?.() ?? {};
-      const secondsInMinute = Number(cfg.secondsInMinute) || 60;
-      const minutesInHour = Number(cfg.minutesInHour) || 60;
-      const hoursInDay = Number(cfg.hoursInDay) || 24;
-      return {
-        minute: secondsInMinute,
-        hour: secondsInMinute * minutesInHour,
-        day: secondsInMinute * minutesInHour * hoursInDay,
-      };
-    }
-  } catch (e) {
-    console.error("GlitchSmith Library | time._unitSeconds failed:", e);
-  }
-  return { minute: 60, hour: 3600, day: 86400 };
+  const { secondsInMinute, minutesInHour, hoursInDay } = getCalendarStructure();
+  return {
+    minute: secondsInMinute,
+    hour: secondsInMinute * minutesInHour,
+    day: secondsInMinute * minutesInHour * hoursInDay,
+  };
 }
 
 /**
@@ -631,9 +640,22 @@ export function onChange(callback) {
       console.error("GlitchSmith Library | time.onChange callback failed:", e);
     }
   };
+  // These providers save time-unit edits or switch calendars without necessarily advancing time.
+  // Their setting onChange handlers update the calendar before updateSetting.
+  const settingHandler = setting => {
+    const source = sourceId();
+    const key = setting?.key;
+    if ((source === TIME_SOURCES.SIMPLE_CALENDAR
+        && ["foundryvtt-simple-calendar.calendar-configuration", "foundryvtt-simple-calendar.active-calendar"].includes(key))
+      || (source === TIME_SOURCES.SIMPLE_CALENDAR_REBORN
+        && ["foundryvtt-simple-calendar-reborn.calendar-configuration", "foundryvtt-simple-calendar-reborn.active-calendar"].includes(key))
+      || (source === TIME_SOURCES.SMARTPHONE_INTERNAL && key === "smartphone-widget.smartphone-time-config")) handler();
+  };
   for (const hook of CHANGE_HOOKS) Hooks.on(hook, handler);
+  Hooks.on("updateSetting", settingHandler);
   return () => {
     for (const hook of CHANGE_HOOKS) Hooks.off(hook, handler);
+    Hooks.off("updateSetting", settingHandler);
   };
 }
 
